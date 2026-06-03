@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>公務員の覚書 — Street/Flyer</title>
+<title>公務員の覚書 — DJ MIX STYLE FLYER</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@600;700&family=Noto+Sans+JP:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@700;900&family=Noto+Sans+JP:wght@700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
@@ -16,9 +16,9 @@
     --gold: #C7A24B;
     --text: #FFFFFF;
     --sub: rgba(255,255,255,.65);
-    --font-en-heavy: 'Archivo Black', sans-serif;
-    --font-en-cond: 'Oswald', sans-serif;
-    --font-ja-heavy: 'Noto Sans JP', sans-serif;
+    --font-heavy: 'Archivo Black', sans-serif;
+    --font-cond: 'Barlow Condensed', sans-serif;
+    --font-ja: 'Noto Sans JP', sans-serif;
 }
 
 * {
@@ -28,16 +28,16 @@
 }
 
 body {
-    background: #151515;
+    background: #111111;
     color: var(--text);
-    font-family: var(--font-ja-heavy);
+    font-family: var(--font-ja);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 50px 20px;
-    gap: 30px;
+    padding: 40px 20px;
+    gap: 25px;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -48,214 +48,240 @@ body {
     background: var(--bg);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.9);
-    border: 2px solid rgba(199, 162, 75, 0.1);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.85);
+    border: 1px solid rgba(199, 162, 75, 0.2);
 }
 
-/* 背景のボム・グラフィック要素 */
-.bg-tagging {
+/* --- SURFACE A: FRONT (DJ PLAYING VISUAL) --- */
+.dj-visual-wrapper {
     position: absolute;
-    right: 10px;
-    top: -10px;
-    font-family: var(--font-en-heavy);
-    font-size: 3.5rem;
-    color: rgba(199, 162, 75, 0.05);
-    line-height: 0.8;
-    z-index: 1;
-    letter-spacing: -0.05em;
-    user-select: none;
-}
-
-.bg-stripe {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 150px;
+    left: 0;
+    top: 0;
+    width: 50%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(199,162,75,0.18) 0%, rgba(0,0,0,0) 70%);
+    overflow: hidden;
     z-index: 1;
 }
 
-/* --- SURFACE A: FRONT --- */
+/* image.png を左側に配置し、右側に向けて黒へグラデーションで溶け込ませる */
+.dj-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(30%) contrast(110%) brightness(85%);
+}
+
+.dj-visual-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 100%);
+}
+
 .front-content {
     position: relative;
     z-index: 2;
-    padding: 22px 24px;
+    padding: 16px 20px;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin-left: 45%; /* テキストを右側に寄せて画像とオーバーラップさせる */
 }
 
-.label-track {
-    font-family: var(--font-en-cond);
+.label-side-a {
+    font-family: var(--font-cond);
     color: var(--gold);
-    font-size: 0.75rem;
-    letter-spacing: 0.2em;
-    font-weight: 700;
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(199, 162, 75, 0.3);
+    padding-bottom: 2px;
 }
 
-.title-heavy {
-    font-size: 1.6rem;
+.title-dj {
+    font-size: 1.5rem;
     line-height: 1.15;
     font-weight: 900;
-    letter-spacing: -0.02em;
-    margin-top: 6px;
+    letter-spacing: -0.01em;
+    margin-top: 10px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
-.title-heavy span {
+.title-dj span {
     color: var(--gold);
-    position: relative;
+    font-family: var(--font-heavy);
+    font-size: 1.3rem;
+    display: block;
+    margin-top: 2px;
 }
 
-.desc-street {
-    font-size: 0.58rem;
-    line-height: 1.7;
+.desc-dj {
+    font-size: 0.55rem;
+    line-height: 1.6;
     color: var(--sub);
     letter-spacing: 0.02em;
-    margin-top: 8px;
-    border-left: 3px solid var(--gold);
-    padding-left: 10px;
+    margin-top: 6px;
 }
 
-.author-heavy {
-    font-family: var(--font-en-heavy);
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--text);
-    border-top: 1px solid rgba(255,255,255,0.2);
-    padding-top: 2px;
-    display: inline-block;
-    width: fit-content;
+.author-track {
+    font-family: var(--font-cond);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #FFFFFF;
+    margin-top: auto;
 }
 
-/* --- SURFACE B: BACK --- */
+/* --- SURFACE B: BACK (B-SIDE TRACKS) --- */
 .back-content {
     padding: 16px 18px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    position: relative;
-    z-index: 2;
 }
 
-.back-header {
-    font-family: var(--font-en-heavy);
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: #000;
-    background: var(--gold);
-    text-align: center;
-    padding: 3px 0;
-    margin-bottom: 12px;
+.back-header-dj {
+    font-family: var(--font-cond);
+    font-size: 0.9rem;
     font-weight: 900;
+    letter-spacing: 0.15em;
+    color: #000000;
+    background: var(--gold);
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 10px;
+    margin-bottom: 12px;
 }
 
-.qr-grid {
+.qr-grid-dj {
     display: grid;
     grid-template-columns: 1fr 1fr;
     row-gap: 12px;
-    column-gap: 14px;
+    column-gap: 12px;
 }
 
-.qr-card-item {
+.qr-track-item {
     display: flex;
     align-items: center;
     gap: 8px;
+    background: rgba(255,255,255,0.03);
+    padding: 4px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
-.qr-wrapper {
+.qr-wrapper-dj {
     background: #FFFFFF;
-    padding: 3px;
+    padding: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    /* QRコードの周りにエッジのある影 */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
 }
 
-.qr-meta {
+.track-meta {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
-.qr-title-en {
-    font-family: var(--font-en-cond);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
+.track-number-en {
+    font-family: var(--font-cond);
+    font-size: 0.7rem;
+    font-weight: 900;
     color: var(--text);
     line-height: 1;
 }
 
-.qr-title-ja {
+.track-name-ja {
     font-size: 0.48rem;
     color: var(--gold);
-    font-weight: 700;
-    margin-top: 2px;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.caption {
-    font-family: var(--font-en-cond);
-    font-size: 0.8rem;
+.caption-label {
+    font-family: var(--font-cond);
+    font-size: 0.75rem;
     color: rgba(255,255,255,0.3);
-    letter-spacing: 0.15em;
-    margin-top: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 }
 </style>
 </head>
 <body>
 
-    <div class="caption">// SIDE A : FRONT</div>
+    <div class="caption-label">// SIDE A : FRONT INFOMATION</div>
+    <!-- FRONT -->
     <div class="flyer-card">
-        <div class="bg-tagging">RAW<br>EDGE</div>
-        <div class="bg-stripe"></div>
+        <!-- image.png を左側にレイアウト -->
+        <div class="dj-visual-wrapper">
+            <img src="image.png" alt="DJ playing turntables in front of city window" class="dj-image" />
+        </div>
+        
         <div class="front-content">
+            <div class="label-side-a">
+                <span>PUBLIC NOTEBOOK</span>
+                <span>SIDE-A</span>
+            </div>
             <div>
-                <div class="label-track">PUBLIC NOTEBOOK // TRACK.01</div>
-                <div class="title-heavy">公務員の<br><span>覚書</span></div>
-                <div class="desc-street">
+                <div class="title-dj">公務員の<span>覚書</span></div>
+                <div class="desc-dj">
                     違和感から始まる。閃きへ向かう。<br>
-                    認知を共有する未来を考える。<br>
-                    独自のリアルをストリートに綴る探究の記録。
+                    都市のノイズをサンプリングし、<br>
+                    認知を共有する未来のビートを刻む。
                 </div>
             </div>
-            <div class="author-heavy">UKIGAI SHINOBU</div>
+            <div class="author-track">MIXED BY UKIGAI SHINOBU</div>
         </div>
     </div>
 
-    <div class="caption">// SIDE B : BACK (SCAN TO TRACK)</div>
+    <div class="caption-label">// SIDE B : TRACK LIST & SCANNERS</div>
+    <!-- BACK -->
     <div class="flyer-card">
         <div class="back-content">
-            <div class="back-header">TRACKS / DIGITAL ARCHIVES</div>
+            <div class="back-header-dj">
+                <span>B-SIDE TRACKS</span>
+                <span>DIGITAL ARCHIVES</span>
+            </div>
             
-            <div class="qr-grid">
-                <div class="qr-card-item">
-                    <div class="qr-wrapper"><div id="street-qr1"></div></div>
-                    <div class="qr-meta">
-                        <div class="qr-title-en">#01 YOHAKU</div>
-                        <div class="qr-title-ja">違和感と余白</div>
+            <div class="qr-grid-dj">
+                <!-- TRACK 01 -->
+                <div class="qr-track-item">
+                    <div class="qr-wrapper-dj"><div id="dj-qr1"></div></div>
+                    <div class="track-meta">
+                        <div class="track-number-en">TRK.01 YOHAKU</div>
+                        <div class="track-name-ja">ZINE : 違和感と余白</div>
                     </div>
                 </div>
-                <div class="qr-card-item">
-                    <div class="qr-wrapper"><div id="street-qr2"></div></div>
-                    <div class="qr-meta">
-                        <div class="qr-title-en">#02 HIRAMEKI</div>
-                        <div class="qr-title-ja">違和感と閃き</div>
+                <!-- TRACK 02 -->
+                <div class="qr-track-item">
+                    <div class="qr-wrapper-dj"><div id="dj-qr2"></div></div>
+                    <div class="track-meta">
+                        <div class="track-number-en">TRK.02 HIRAMEKI</div>
+                        <div class="track-name-ja">ZINE : 違和感と閃き</div>
                     </div>
                 </div>
-                <div class="qr-card-item">
-                    <div class="qr-wrapper"><div id="street-qr3"></div></div>
-                    <div class="qr-meta">
-                        <div class="qr-title-en">#03 UCI VISION</div>
-                        <div class="qr-title-ja">UCI構想の記録</div>
+                <!-- TRACK 03 -->
+                <div class="qr-track-item">
+                    <div class="qr-wrapper-dj"><div id="dj-qr3"></div></div>
+                    <div class="track-meta">
+                        <div class="track-number-en">TRK.03 UCI VISION</div>
+                        <div class="track-name-ja">UCI構想の記録</div>
                     </div>
                 </div>
-                <div class="qr-card-item">
-                    <div class="qr-wrapper"><div id="street-qr4"></div></div>
-                    <div class="qr-meta">
-                        <div class="qr-title-en">#04 PROFILE</div>
-                        <div class="qr-title-ja">AUTHOR ARCHIVE</div>
+                <!-- TRACK 04 -->
+                <div class="qr-track-item">
+                    <div class="qr-wrapper-dj"><div id="dj-qr4"></div></div>
+                    <div class="track-meta">
+                        <div class="track-number-en">TRK.04 PROFILE</div>
+                        <div class="track-name-ja">AUTHOR ARCHIVE</div>
                     </div>
                 </div>
             </div>
@@ -263,31 +289,31 @@ body {
     </div>
 
 <script>
-// 名刺フライヤーの限られたスペースに最適化した高密度リアルQRコード (サイズ: 46px)
-const qrSize = 46;
+// 名刺サイズのB面グリッドに合わせた、スキャン感度の高いリアルQR生成
+const qrSize = 44;
 
-new QRCode(document.getElementById("street-qr1"), {
+new QRCode(document.getElementById("dj-qr1"), {
     text: "https://zineprot.vercel.app/",
     width: qrSize,
     height: qrSize,
     correctLevel: QRCode.CorrectLevel.M
 });
 
-new QRCode(document.getElementById("street-qr2"), {
+new QRCode(document.getElementById("dj-qr2"), {
     text: "https://zine2-pi.vercel.app/",
     width: qrSize,
     height: qrSize,
     correctLevel: QRCode.CorrectLevel.M
 });
 
-new QRCode(document.getElementById("street-qr3"), {
+new QRCode(document.getElementById("dj-qr3"), {
     text: "https://ucizine.vercel.app/",
     width: qrSize,
     height: qrSize,
     correctLevel: QRCode.CorrectLevel.M
 });
 
-new QRCode(document.getElementById("street-qr4"), {
+new QRCode(document.getElementById("dj-qr4"), {
     text: "https://cheerful-dodol-f6885d.netlify.app/",
     width: qrSize,
     height: qrSize,
