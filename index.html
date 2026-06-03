@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>公務員の覚書 — UNDERGROUND DJ FLYER</title>
+<title>公務員の覚書 — VINYL & TURNTABLE EDITION</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- 太いサンセリフと、デジタル/テクノ感のあるフォントを採用 -->
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:ital,wght@0,900;1,900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 :root {
-    --bg: #0A0A0A;
-    --gold: #D4AF37; /* よりソリッドなゴールド */
+    --bg: #0D0D0D;
+    --vinyl-base: #151515;
+    --gold: #C5A059;
     --text: #FFFFFF;
     --sub: #888888;
     --font-heavy: 'Archivo Black', sans-serif;
@@ -50,282 +50,346 @@ body {
     background: var(--bg);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.9);
-    border: 2px solid #1a1a1a;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.95);
+    border: 1px solid #222;
+}
+
+/* --- SIDE A: THE TURNTABLE --- */
+.tt-deck {
     padding: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 右側に大胆にはみ出す巨大レコード盤（溝をグラデーションで再現） */
+.vinyl-platter {
+    position: absolute;
+    right: -70px;
+    top: -16px;
+    width: 240px;
+    height: 240px;
+    background: repeating-radial-gradient(
+        circle,
+        #111 0px,
+        #181818 2px,
+        #222 4px,
+        #111 5px
+    );
+    border-radius: 50%;
+    box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 10px 30px rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* レコードの中心ラベル（センターレーベル） */
+.center-label {
+    width: 85px;
+    height: 85px;
+    background: var(--gold);
+    border-radius: 50%;
+    border: 3px double #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    text-align: center;
+    position: relative;
+}
+
+/* レコードの真ん中の穴（センタースピンドル） */
+.center-hole {
+    width: 10px;
+    height: 10px;
+    background: #000;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: inset 0 2px 2px rgba(255,255,255,0.4);
+}
+
+.label-text-top {
+    font-family: var(--font-cond);
+    font-size: 0.55rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    margin-bottom: 14px;
+}
+.label-text-bottom {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    font-weight: bold;
+    margin-top: 14px;
+}
+
+/* 表面の左側：DJミキサー風テキストレイアウト */
+.tt-controls {
+    width: 55%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 2;
+    position: relative;
+}
+
+.deck-status {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--gold);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.deck-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #ff3333; /* 録音/通電ランプ */
+    border-radius: 50%;
+    animation: blink 1s infinite alternate;
+}
+
+@keyframes blink { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+
+.main-title-heavy {
+    font-size: 1.7rem;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-top: 15px;
+}
+.main-title-heavy span {
+    color: var(--gold);
+    font-family: var(--font-heavy);
+    font-size: 1.4rem;
+    display: block;
+}
+
+.tt-slogan {
+    font-size: 0.52rem;
+    color: var(--sub);
+    line-height: 1.4;
+    margin-top: 6px;
+}
+
+.tt-footer {
+    font-family: var(--font-cond);
+    font-size: 0.95rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+}
+
+
+/* --- SIDE B: MULTI-VINYL TRACKS --- */
+.back-deck {
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-/* レコードの溝・フェーダーをイメージしたインダストリアルな背景ストライプ */
-.flyer-card::before {
-    content: '';
-    position: absolute;
-    right: 10px;
-    top: 0;
-    width: 60px;
-    height: 100%;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255,255,255,0.02) 10%, 
-        transparent 20%,
-        rgba(255,255,255,0.02) 30%,
-        transparent 40%,
-        rgba(199, 162, 75, 0.04) 50%,
-        transparent 60%
-    );
-    background-size: 8px 100%;
-    pointer-events: none;
-}
-
-/* --- SIDE A (FRONT) --- */
-.front-header {
+.back-title-bar {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    border-bottom: 2px solid var(--text);
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
     padding-bottom: 4px;
 }
-
-.bpm-counter {
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    color: var(--gold);
-    letter-spacing: 0.05em;
-}
-
-.side-badge {
+.back-title-bar h2 {
     font-family: var(--font-cond);
-    font-size: 1.4rem;
-    font-weight: 900;
-    font-style: italic;
-    line-height: 0.8;
-    color: var(--text);
-}
-
-.main-title-zone {
-    margin-top: 10px;
-}
-
-.heavy-title {
-    font-family: var(--font-ja);
-    font-size: 1.85rem;
-    font-weight: 900;
-    line-height: 1.0;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
-}
-.heavy-title span {
-    color: var(--gold);
-    font-family: var(--font-heavy);
-    font-size: 1.65rem;
-    display: inline-block;
-    margin-left: 2px;
-}
-
-.sub-slogan {
-    font-size: 0.52rem;
-    color: var(--sub);
-    line-height: 1.5;
-    margin-top: 8px;
-    letter-spacing: 0.05em;
-    border-left: 2px solid var(--gold);
-    padding-left: 6px;
-}
-
-.front-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    font-family: var(--font-cond);
-}
-
-.artist-name {
-    font-size: 1.1rem;
-    font-weight: 900;
-    letter-spacing: 0.03em;
-    line-height: 1;
-}
-.artist-name span {
-    font-size: 0.6rem;
-    color: var(--gold);
-    display: block;
-    margin-bottom: 3px;
-    font-family: var(--font-mono);
-}
-
-.catalog-number {
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    color: rgba(255,255,255,0.4);
-}
-
-
-/* --- SIDE B (BACK) --- */
-.back-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--text);
-    color: var(--bg);
-    padding: 2px 6px;
-    font-family: var(--font-cond);
-    font-weight: 900;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     letter-spacing: 0.1em;
 }
-.back-header .b-gold {
-    color: #856404;
+.back-title-bar .rpm-tag {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--gold);
 }
 
-.track-list-container {
+/* 4枚のミニレコードが並ぶグリッド */
+.vinyl-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: 10px;
+    gap: 10px;
+    margin-top: 8px;
 }
 
-.track-row {
+.vinyl-track-card {
     display: flex;
     align-items: center;
-    background: rgba(255,255,255,0.02);
-    border: 1px dashed rgba(255,255,255,0.1);
-    padding: 4px;
+    background: #111;
+    border: 1px solid #1a1a1a;
+    padding: 4px 8px 4px 4px;
+    border-radius: 4px;
+    position: relative;
 }
 
-.qr-box {
-    background: #FFFFFF;
-    padding: 2px;
+/* ミニレコード盤（QRコードの土台） */
+.mini-vinyl {
+    width: 48px;
+    height: 48px;
+    background: repeating-radial-gradient(
+        circle,
+        #222 0px,
+        #111 2px,
+        #292929 3px,
+        #151515 4px
+    );
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 
-.track-info {
-    margin-left: 6px;
+/* ミニレコードの中心にQRコードを埋め込む */
+.mini-qr-wrapper {
+    width: 26px;
+    height: 26px;
+    background: #FFF;
+    padding: 1px;
+    border-radius: 2px; /* わずかに角を丸めてレコードに馴染ませる */
+    z-index: 2;
     overflow: hidden;
 }
 
-.track-meta-en {
+.track-details {
+    margin-left: 10px;
+    overflow: hidden;
+}
+.track-id {
     font-family: var(--font-mono);
     font-size: 0.55rem;
     color: var(--gold);
     line-height: 1;
 }
-
-.track-meta-ja {
-    font-size: 0.48rem;
+.track-name {
+    font-size: 0.5rem;
     font-weight: 900;
-    color: var(--text);
-    margin-top: 2px;
+    color: #FFF;
+    margin-top: 3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.back-footer-bar {
+.back-footer-text {
     font-family: var(--font-mono);
-    font-size: 0.5rem;
+    font-size: 0.48rem;
     color: rgba(255,255,255,0.2);
     text-align: center;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 4px;
     margin-top: auto;
-    letter-spacing: 0.05em;
 }
 
-/* 共通キャプション */
-.section-tag {
+/* 外枠のタグ */
+.section-indicator {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--gold);
-    letter-spacing: 0.1em;
+    font-size: 0.65rem;
+    color: var(--sub);
+    letter-spacing: 0.05em;
 }
 </style>
 </head>
 <body>
 
-    <div class="section-tag">[ DECK_A : SOUND SOURCE ]</div>
+    <div class="section-indicator">A-SIDE // 33 RPM TURNTABLE DECK</div>
     
     <!-- FRONT (SIDE A) -->
-    <div class="flyer-card">
-        <div class="front-header">
-            <div class="bpm-counter">ANALOG SAMPLING // BPM.124</div>
-            <div class="side-badge">SIDE_A</div>
-        </div>
-        
-        <div class="main-title-zone">
-            <h1 class="heavy-title">公務員の<span>MEMO</span></h1>
-            <p class="sub-slogan">
-                街のノイズをサンプリングし、違和感を思考のビートに変える。<br>
-                これは行政の枠組みをハックする、深夜の思考実験。
-            </p>
-        </div>
-        
-        <div class="front-footer">
-            <div class="artist-name">
-                <span>TRACK MAKER / DJ</span>
-                UKIGAI SHINOBU
+    <div class="flyer-card tt-deck">
+        <div class="tt-controls">
+            <div class="deck-status">PLUGGED / 12ch MIXER IN USE</div>
+            <div>
+                <h1 class="main-title-heavy">公務員の<span>覚書</span></h1>
+                <p class="tt-slogan">
+                    都市のノイズをサンプリングし、違和感を思考のビートに変える深夜の実験的スピン。
+                </p>
             </div>
-            <div class="catalog-number">PN-2026-VOL1</div>
+            <div class="tt-footer">SHINOBU UKIGAI</div>
+        </div>
+
+        <!-- ターンテーブル上のレコード盤をCSSで完全表現 -->
+        <div class="vinyl-platter">
+            <div class="center-label">
+                <div class="label-text-top">PUBLIC NOTE</div>
+                <div class="center-hole"></div>
+                <div class="label-text-bottom">SIDE A</div>
+            </div>
         </div>
     </div>
 
 
-    <div class="section-tag">[ DECK_B : TRACK ARCHIVES ]</div>
+    <div class="section-indicator">B-SIDE // 45 RPM MULTI-CUTS</div>
 
     <!-- BACK (SIDE B) -->
-    <div class="flyer-card">
-        <div class="back-header">
-            <span>B-SIDE REMIXES</span>
-            <span class="b-gold">DIGITAL PRESS</span>
+    <div class="flyer-card back-deck">
+        <div class="back-title-bar">
+            <h2>REMIX ARCHIVES</h2>
+            <div class="rpm-tag">STEREO / 45 RPM</div>
         </div>
         
-        <div class="track-list-container">
-            <!-- TRK 1 -->
-            <div class="track-row">
-                <div class="qr-box"><div id="qr-t1"></div></div>
-                <div class="track-info">
-                    <div class="track-meta-en">TRACK.01 / YOHAKU</div>
-                    <div class="track-meta-ja">ZINE : 違和感と余白</div>
+        <div class="vinyl-grid">
+            <!-- TRACK 1 -->
+            <div class="vinyl-track-card">
+                <div class="mini-vinyl">
+                    <div class="mini-qr-wrapper"><div id="vinyl-qr1"></div></div>
+                </div>
+                <div class="track-details">
+                    <div class="track-id">CUT.01</div>
+                    <div class="track-name">違和感と余白</div>
                 </div>
             </div>
-            <!-- TRK 2 -->
-            <div class="track-row">
-                <div class="qr-box"><div id="qr-t2"></div></div>
-                <div class="track-info">
-                    <div class="track-meta-en">TRACK.02 / HIRAMEKI</div>
-                    <div class="track-meta-ja">ZINE : 違和感と閃き</div>
+            <!-- TRACK 2 -->
+            <div class="vinyl-track-card">
+                <div class="mini-vinyl">
+                    <div class="mini-qr-wrapper"><div id="vinyl-qr2"></div></div>
+                </div>
+                <div class="track-details">
+                    <div class="track-id">CUT.02</div>
+                    <div class="track-name">違和感と閃き</div>
                 </div>
             </div>
-            <!-- TRK 3 -->
-            <div class="track-row">
-                <div class="qr-box"><div id="qr-t3"></div></div>
-                <div class="track-info">
-                    <div class="track-meta-en">TRACK.03 / UCI_V</div>
-                    <div class="track-meta-ja">UCI構想の記録</div>
+            <!-- TRACK 3 -->
+            <div class="vinyl-track-card">
+                <div class="mini-vinyl">
+                    <div class="mini-qr-wrapper"><div id="vinyl-qr3"></div></div>
+                </div>
+                <div class="track-details">
+                    <div class="track-id">CUT.03</div>
+                    <div class="track-name">UCI構想の記録</div>
                 </div>
             </div>
-            <!-- TRK 4 -->
-            <div class="track-row">
-                <div class="qr-box"><div id="qr-t4"></div></div>
-                <div class="track-info">
-                    <div class="track-meta-en">TRACK.04 / PROFILE</div>
-                    <div class="track-meta-ja">AUTHOR ARCHIVE</div>
+            <!-- TRACK 4 -->
+            <div class="vinyl-track-card">
+                <div class="mini-vinyl">
+                    <div class="mini-qr-wrapper"><div id="vinyl-qr4"></div></div>
+                </div>
+                <div class="track-details">
+                    <div class="track-id">CUT.04</div>
+                    <div class="track-name">PROFILE ARCHIVE</div>
                 </div>
             </div>
         </div>
         
-        <div class="back-footer-bar">
-            ALL RIGHTS RESERVED. SCAN THE CODE TO PLAY THE CUTS.
+        <div class="back-footer-text">
+            PLACE STYLUS ON THE CODE / SPIN TO DIGITAL NOTEBOOK.
         </div>
     </div>
 
 <script>
-// QRコードの解像度とサイズ調整（読み取り精度MAX）
-const qrSize = 44;
+// ミニレコードのセンターに美しく収まるサイズ（26px）で高感度生成
+const qrSize = 26;
+
+new QRCode(document.getElementById("vinyl-qr1"), {
+    text: "https://zineprot.vercel.app/",
+    width: qrSize,
+    height: qrSize,
+    correctLevel: QRCode.CorrectLevel.M
+});
 
 new QRCode(document.getElementById("qr-t1"), {
     text: "https://zineprot.vercel.app/",
@@ -334,21 +398,21 @@ new QRCode(document.getElementById("qr-t1"), {
     correctLevel: QRCode.CorrectLevel.M
 });
 
-new QRCode(document.getElementById("qr-t2"), {
+new QRCode(document.getElementById("vinyl-qr2"), {
     text: "https://zine2-pi.vercel.app/",
     width: qrSize,
     height: qrSize,
     correctLevel: QRCode.CorrectLevel.M
 });
 
-new QRCode(document.getElementById("qr-t3"), {
+new QRCode(document.getElementById("vinyl-qr3"), {
     text: "https://ucizine.vercel.app/",
     width: qrSize,
     height: qrSize,
     correctLevel: QRCode.CorrectLevel.M
 });
 
-new QRCode(document.getElementById("qr-t4"), {
+new QRCode(document.getElementById("vinyl-qr4"), {
     text: "https://cheerful-dodol-f6885d.netlify.app/",
     width: qrSize,
     height: qrSize,
