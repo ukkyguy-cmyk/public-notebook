@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>公務員の覚書</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;700&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+:root{
+--bg:#050505;
+--gold:#C7A24B;
+--text:#F5F5F5;
+--sub:rgba(255,255,255,.65);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'Noto Serif JP',serif;
+overflow-x:hidden;
+}
+
+section{
+padding:120px 8%;
+position:relative;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+.number{
+color:var(--gold);
+letter-spacing:.3em;
+font-family:'Montserrat',sans-serif;
+font-size:.85rem;
+margin-bottom:20px;
+}
+
+.hero{
+min-height:100vh;
+display:flex;
+align-items:center;
+overflow:hidden;
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+max-width:700px;
+}
+
+.hero-label{
+color:var(--gold);
+font-family:'Montserrat',sans-serif;
+letter-spacing:.5em;
+margin-bottom:30px;
+}
+
+.hero h1{
+font-size:clamp(4rem,10vw,8rem);
+line-height:.95;
+margin-bottom:40px;
+}
+
+.hero p{
+color:var(--sub);
+font-size:1.15rem;
+line-height:2;
+}
+
+.circle-wrap{
+position:absolute;
+right:-200px;
+top:50%;
+transform:translateY(-50%);
+}
+
+.circle{
+width:700px;
+height:700px;
+border:1px solid rgba(199,162,75,.15);
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+animation:spin 120s linear infinite;
+}
+
+.circle2{
+width:500px;
+height:500px;
+border:1px solid rgba(199,162,75,.15);
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.core{
+width:160px;
+height:160px;
+background:var(--gold);
+border-radius:50%;
+}
+
+@keyframes spin{
+from{transform:rotate(0deg);}
+to{transform:rotate(360deg);}
+}
+
+h2{
+font-size:clamp(2.5rem,5vw,5rem);
+line-height:1.1;
+margin-bottom:30px;
+}
+
+.big-en{
+font-family:'Montserrat',sans-serif;
+font-weight:800;
+font-size:clamp(3rem,7vw,6rem);
+line-height:.95;
+margin-bottom:25px;
+}
+
+.text{
+max-width:760px;
+color:var(--sub);
+line-height:2;
+font-size:1.05rem;
+}
+
+.zine{
+display:grid;
+grid-template-columns:1fr 280px;
+gap:60px;
+align-items:center;
+border-top:1px solid rgba(255,255,255,.08);
+}
+
+.qr{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:25px;
+}
+
+.qr-box{
+background:white;
+padding:14px;
+}
+
+.btn{
+display:inline-block;
+padding:14px 40px;
+border:1px solid var(--gold);
+text-decoration:none;
+color:var(--text);
+font-family:'Montserrat',sans-serif;
+letter-spacing:.2em;
+transition:.3s;
+}
+
+.btn:hover{
+background:var(--gold);
+color:black;
+}
+
+.author{
+background:#0b0b0b;
+}
+
+.author-name{
+font-size:clamp(4rem,9vw,8rem);
+line-height:.9;
+font-family:'Montserrat',sans-serif;
+font-weight:800;
+margin-bottom:30px;
+}
+
+.journey{
+text-align:center;
+}
+
+.step{
+font-size:clamp(2rem,4vw,4rem);
+font-weight:700;
+margin:25px 0;
+}
+
+.footer{
+text-align:center;
+border-top:1px solid rgba(255,255,255,.08);
+}
+
+.footer-title{
+font-size:clamp(3rem,6vw,6rem);
+font-family:'Montserrat',sans-serif;
+font-weight:800;
+margin-bottom:30px;
+}
+
+.fade{
+opacity:0;
+transform:translateY(40px);
+transition:1s ease;
+}
+
+.fade.show{
+opacity:1;
+transform:none;
+}
+
+@media(max-width:900px){
+
+.zine{
+grid-template-columns:1fr;
+}
+
+.circle-wrap{
+opacity:.25;
+right:-350px;
+}
+
+.hero{
+padding-top:100px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+
+<div class="circle-wrap">
+<div class="circle">
+<div class="circle2">
+<div class="core"></div>
+</div>
+</div>
+</div>
+
+<div class="container hero-content">
+
+<div class="hero-label">
+PUBLIC NOTEBOOK
+</div>
+
+<h1>
+公務員の<br>覚書
+</h1>
+
+<p>
+違和感から始まる。<br>
+閃きへ向かう。<br>
+認知を共有する未来を考える。
+</p>
+
+</div>
+
+</section>
+
+<section class="fade">
+
+<div class="container">
+
+<div class="number">
+01 — CONCEPT
+</div>
+
+<h2>
+人は同じ世界を<br>
+見ていない
+</h2>
+
+<div class="text">
+世界はひとつに見える。<br><br>
+
+けれど、人が見ている世界は同じではない。<br><br>
+
+違和感。<br>
+閃き。<br>
+認知。<br>
+共有。<br><br>
+
+その先にある新しい公共。<br><br>
+
+これは認知をめぐる探究の記録。
+</div>
+
+</div>
+
+</section>
+
+<section class="zine fade">
+
+<div>
+
+<div class="number">02 — ZINE</div>
+
+<div class="big-en">
+IWAKAN<br>&<br>YOHAKU
+</div>
+
+<h3>違和感と余白</h3>
+
+<br>
+
+<div class="text">
+違和感は問いの種。<br>
+余白は新しい認知の入口。<br><br>
+
+見過ごされがちな感覚から、
+世界を見直していく。
+</div>
+
+</div>
+
+<div class="qr">
+
+<div id="qr1" class="qr-box"></div>
+
+<a class="btn"
+href="https://zineprot.vercel.app/"
+target="_blank">
+READ
+</a>
+
+</div>
+
+</section>
+
+<section class="zine fade">
+
+<div>
+
+<div class="number">03 — ZINE</div>
+
+<div class="big-en">
+IWAKAN<br>&<br>HIRAMEKI
+</div>
+
+<h3>違和感と閃き</h3>
+
+<br>
+
+<div class="text">
+閃きは突然現れない。<br><br>
+
+違和感を抱え、
+混ざり、
+言葉にし、
+試す。<br><br>
+
+そのプロセスを辿る。
+</div>
+
+</div>
+
+<div class="qr">
+
+<div id="qr2" class="qr-box"></div>
+
+<a class="btn"
+href="https://zine2-pi.vercel.app/"
+target="_blank">
+READ
+</a>
+
+</div>
+
+</section>
+
+<section class="zine fade">
+
+<div>
+
+<div class="number">04 — VISION</div>
+
+<div class="big-en">
+URBAN<br>
+COGNITION<br>
+INTERFACE
+</div>
+
+<h3>Urban Cognition Interface</h3>
+
+<br>
+
+<div class="text">
+都市には物理空間だけでなく、
+認知のレイヤーが存在する。<br><br>
+
+認知差を肯定し、
+共有するための構想。
+</div>
+
+</div>
+
+<div class="qr">
+
+<div id="qr3" class="qr-box"></div>
+
+<a class="btn"
+href="https://ucizine.vercel.app/"
+target="_blank">
+READ
+</a>
+
+</div>
+
+</section>
+
+<section class="author fade">
+
+<div class="container">
+
+<div class="number">
+05 — AUTHOR
+</div>
+
+<div class="author-name">
+UKIGAI<br>
+SHINOBU
+</div>
+
+<div class="text">
+公共空間の活用。<br>
+官民共創。<br>
+まちづくり。<br><br>
+
+認知の違いが生み出す可能性を探究している。
+</div>
+
+<br><br>
+
+<div id="qr4" class="qr-box" style="display:inline-block;"></div>
+
+<br><br>
+
+<a
+class="btn"
+href="https://cheerful-dodol-f6885d.netlify.app/"
+target="_blank">
+PROFILE
+</a>
+
+</div>
+
+</section>
+
+<section class="journey fade">
+
+<div class="number">
+06 — JOURNEY
+</div>
+
+<div class="step">違和感</div>
+<div class="step">↓</div>
+
+<div class="step">問い</div>
+<div class="step">↓</div>
+
+<div class="step">閃き</div>
+<div class="step">↓</div>
+
+<div class="step">認知</div>
+<div class="step">↓</div>
+
+<div class="step">共有</div>
+<div class="step">↓</div>
+
+<div class="step" style="color:#C7A24B">
+新しい公共
+</div>
+
+</section>
+
+<section class="footer">
+
+<div class="footer-title">
+PUBLIC NOTEBOOK
+</div>
+
+<div class="text" style="margin:auto;text-align:center">
+世界はひとつではない。<br>
+だから面白い。
+</div>
+
+</section>
+
+<script>
+
+new QRCode(document.getElementById("qr1"),{
+text:"https://zineprot.vercel.app/",
+width:180,
+height:180
+});
+
+new QRCode(document.getElementById("qr2"),{
+text:"https://zine2-pi.vercel.app/",
+width:180,
+height:180
+});
+
+new QRCode(document.getElementById("qr3"),{
+text:"https://ucizine.vercel.app/",
+width:180,
+height:180
+});
+
+new QRCode(document.getElementById("qr4"),{
+text:"https://cheerful-dodol-f6885d.netlify.app/",
+width:180,
+height:180
+});
+
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show");
+}
+});
+},{
+threshold:0.15
+});
+
+document.querySelectorAll(".fade").forEach(el=>{
+observer.observe(el);
+});
+
+</script>
+
+</body>
+</html>
