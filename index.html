@@ -3,21 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>公務員の覚書 — DJ MIX STYLE FLYER</title>
+<title>公務員の覚書 — UNDERGROUND DJ FLYER</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@700;900&family=Noto+Sans+JP:wght@700;900&display=swap" rel="stylesheet">
+<!-- 太いサンセリフと、デジタル/テクノ感のあるフォントを採用 -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:ital,wght@0,900;1,900&family=Share+Tech+Mono&family=Noto+Sans+JP:wght@900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 :root {
-    --bg: #000000;
-    --gold: #C7A24B;
+    --bg: #0A0A0A;
+    --gold: #D4AF37; /* よりソリッドなゴールド */
     --text: #FFFFFF;
-    --sub: rgba(255,255,255,.65);
+    --sub: #888888;
     --font-heavy: 'Archivo Black', sans-serif;
     --font-cond: 'Barlow Condensed', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
     --font-ja: 'Noto Sans JP', sans-serif;
 }
 
@@ -28,7 +30,7 @@
 }
 
 body {
-    background: #111111;
+    background: #000000;
     color: var(--text);
     font-family: var(--font-ja);
     display: flex;
@@ -37,7 +39,7 @@ body {
     justify-content: center;
     min-height: 100vh;
     padding: 40px 20px;
-    gap: 25px;
+    gap: 30px;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -48,133 +50,151 @@ body {
     background: var(--bg);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.85);
-    border: 1px solid rgba(199, 162, 75, 0.2);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.9);
+    border: 2px solid #1a1a1a;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-/* --- SURFACE A: FRONT (DJ PLAYING VISUAL) --- */
-.dj-visual-wrapper {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    z-index: 1;
-}
-
-/* image.png を左側に配置し、右側に向けて黒へグラデーションで溶け込ませる */
-.dj-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: grayscale(30%) contrast(110%) brightness(85%);
-}
-
-.dj-visual-wrapper::after {
+/* レコードの溝・フェーダーをイメージしたインダストリアルな背景ストライプ */
+.flyer-card::before {
     content: '';
     position: absolute;
+    right: 10px;
     top: 0;
-    left: 0;
-    width: 100%;
+    width: 60px;
     height: 100%;
-    background: linear-gradient(90deg, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 100%);
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255,255,255,0.02) 10%, 
+        transparent 20%,
+        rgba(255,255,255,0.02) 30%,
+        transparent 40%,
+        rgba(199, 162, 75, 0.04) 50%,
+        transparent 60%
+    );
+    background-size: 8px 100%;
+    pointer-events: none;
 }
 
-.front-content {
-    position: relative;
-    z-index: 2;
-    padding: 16px 20px;
-    height: 100%;
+/* --- SIDE A (FRONT) --- */
+.front-header {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    margin-left: 45%; /* テキストを右側に寄せて画像とオーバーラップさせる */
+    align-items: baseline;
+    border-bottom: 2px solid var(--text);
+    padding-bottom: 4px;
 }
 
-.label-side-a {
-    font-family: var(--font-cond);
+.bpm-counter {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
     color: var(--gold);
-    font-size: 0.85rem;
-    font-weight: 900;
-    letter-spacing: 0.1em;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(199, 162, 75, 0.3);
-    padding-bottom: 2px;
+    letter-spacing: 0.05em;
 }
 
-.title-dj {
-    font-size: 1.5rem;
-    line-height: 1.15;
+.side-badge {
+    font-family: var(--font-cond);
+    font-size: 1.4rem;
     font-weight: 900;
-    letter-spacing: -0.01em;
-    margin-top: 10px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    font-style: italic;
+    line-height: 0.8;
+    color: var(--text);
 }
-.title-dj span {
+
+.main-title-zone {
+    margin-top: 10px;
+}
+
+.heavy-title {
+    font-family: var(--font-ja);
+    font-size: 1.85rem;
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+}
+.heavy-title span {
     color: var(--gold);
     font-family: var(--font-heavy);
-    font-size: 1.3rem;
-    display: block;
-    margin-top: 2px;
+    font-size: 1.65rem;
+    display: inline-block;
+    margin-left: 2px;
 }
 
-.desc-dj {
-    font-size: 0.55rem;
-    line-height: 1.6;
+.sub-slogan {
+    font-size: 0.52rem;
     color: var(--sub);
-    letter-spacing: 0.02em;
-    margin-top: 6px;
-}
-
-.author-track {
-    font-family: var(--font-cond);
-    font-size: 0.8rem;
-    font-weight: 700;
+    line-height: 1.5;
+    margin-top: 8px;
     letter-spacing: 0.05em;
-    color: #FFFFFF;
-    margin-top: auto;
+    border-left: 2px solid var(--gold);
+    padding-left: 6px;
 }
 
-/* --- SURFACE B: BACK (B-SIDE TRACKS) --- */
-.back-content {
-    padding: 16px 18px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.back-header-dj {
-    font-family: var(--font-cond);
-    font-size: 0.9rem;
-    font-weight: 900;
-    letter-spacing: 0.15em;
-    color: #000000;
-    background: var(--gold);
+.front-footer {
     display: flex;
     justify-content: space-between;
-    padding: 2px 10px;
-    margin-bottom: 12px;
+    align-items: flex-end;
+    font-family: var(--font-cond);
 }
 
-.qr-grid-dj {
+.artist-name {
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    line-height: 1;
+}
+.artist-name span {
+    font-size: 0.6rem;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 3px;
+    font-family: var(--font-mono);
+}
+
+.catalog-number {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: rgba(255,255,255,0.4);
+}
+
+
+/* --- SIDE B (BACK) --- */
+.back-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--text);
+    color: var(--bg);
+    padding: 2px 6px;
+    font-family: var(--font-cond);
+    font-weight: 900;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+}
+.back-header .b-gold {
+    color: #856404;
+}
+
+.track-list-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    row-gap: 12px;
-    column-gap: 12px;
+    gap: 8px;
+    margin-top: 10px;
 }
 
-.qr-track-item {
+.track-row {
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(255,255,255,0.03);
+    background: rgba(255,255,255,0.02);
+    border: 1px dashed rgba(255,255,255,0.1);
     padding: 4px;
-    border: 1px solid rgba(255,255,255,0.05);
 }
 
-.qr-wrapper-dj {
+.qr-box {
     background: #FFFFFF;
     padding: 2px;
     display: flex;
@@ -183,137 +203,152 @@ body {
     flex-shrink: 0;
 }
 
-.track-meta {
-    display: flex;
-    flex-direction: column;
+.track-info {
+    margin-left: 6px;
     overflow: hidden;
 }
 
-.track-number-en {
-    font-family: var(--font-cond);
-    font-size: 0.7rem;
-    font-weight: 900;
-    color: var(--text);
+.track-meta-en {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    color: var(--gold);
     line-height: 1;
 }
 
-.track-name-ja {
+.track-meta-ja {
     font-size: 0.48rem;
-    color: var(--gold);
-    margin-top: 3px;
+    font-weight: 900;
+    color: var(--text);
+    margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.caption-label {
-    font-family: var(--font-cond);
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.3);
+.back-footer-bar {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    color: rgba(255,255,255,0.2);
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 4px;
+    margin-top: auto;
+    letter-spacing: 0.05em;
+}
+
+/* 共通キャプション */
+.section-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--gold);
     letter-spacing: 0.1em;
-    text-transform: uppercase;
 }
 </style>
 </head>
 <body>
 
-    <div class="caption-label">// SIDE A : FRONT INFOMATION</div>
-    <!-- FRONT -->
+    <div class="section-tag">[ DECK_A : SOUND SOURCE ]</div>
+    
+    <!-- FRONT (SIDE A) -->
     <div class="flyer-card">
-        <!-- image.png を左側にレイアウト -->
-        <div class="dj-visual-wrapper">
-            <img src="image.png" alt="DJ playing turntables in front of city window" class="dj-image" />
+        <div class="front-header">
+            <div class="bpm-counter">ANALOG SAMPLING // BPM.124</div>
+            <div class="side-badge">SIDE_A</div>
         </div>
         
-        <div class="front-content">
-            <div class="label-side-a">
-                <span>PUBLIC NOTEBOOK</span>
-                <span>SIDE-A</span>
+        <div class="main-title-zone">
+            <h1 class="heavy-title">公務員の<span>MEMO</span></h1>
+            <p class="sub-slogan">
+                街のノイズをサンプリングし、違和感を思考のビートに変える。<br>
+                これは行政の枠組みをハックする、深夜の思考実験。
+            </p>
+        </div>
+        
+        <div class="front-footer">
+            <div class="artist-name">
+                <span>TRACK MAKER / DJ</span>
+                UKIGAI SHINOBU
             </div>
-            <div>
-                <div class="title-dj">公務員の<span>覚書</span></div>
-                <div class="desc-dj">
-                    違和感から始まる。閃きへ向かう。<br>
-                    都市のノイズをサンプリングし、<br>
-                    認知を共有する未来のビートを刻む。
-                </div>
-            </div>
-            <div class="author-track">MIXED BY UKIGAI SHINOBU</div>
+            <div class="catalog-number">PN-2026-VOL1</div>
         </div>
     </div>
 
-    <div class="caption-label">// SIDE B : TRACK LIST & SCANNERS</div>
-    <!-- BACK -->
+
+    <div class="section-tag">[ DECK_B : TRACK ARCHIVES ]</div>
+
+    <!-- BACK (SIDE B) -->
     <div class="flyer-card">
-        <div class="back-content">
-            <div class="back-header-dj">
-                <span>B-SIDE TRACKS</span>
-                <span>DIGITAL ARCHIVES</span>
-            </div>
-            
-            <div class="qr-grid-dj">
-                <!-- TRACK 01 -->
-                <div class="qr-track-item">
-                    <div class="qr-wrapper-dj"><div id="dj-qr1"></div></div>
-                    <div class="track-meta">
-                        <div class="track-number-en">TRK.01 YOHAKU</div>
-                        <div class="track-name-ja">ZINE : 違和感と余白</div>
-                    </div>
-                </div>
-                <!-- TRACK 02 -->
-                <div class="qr-track-item">
-                    <div class="qr-wrapper-dj"><div id="dj-qr2"></div></div>
-                    <div class="track-meta">
-                        <div class="track-number-en">TRK.02 HIRAMEKI</div>
-                        <div class="track-name-ja">ZINE : 違和感と閃き</div>
-                    </div>
-                </div>
-                <!-- TRACK 03 -->
-                <div class="qr-track-item">
-                    <div class="qr-wrapper-dj"><div id="dj-qr3"></div></div>
-                    <div class="track-meta">
-                        <div class="track-number-en">TRK.03 UCI VISION</div>
-                        <div class="track-name-ja">UCI構想の記録</div>
-                    </div>
-                </div>
-                <!-- TRACK 04 -->
-                <div class="qr-track-item">
-                    <div class="qr-wrapper-dj"><div id="dj-qr4"></div></div>
-                    <div class="track-meta">
-                        <div class="track-number-en">TRK.04 PROFILE</div>
-                        <div class="track-name-ja">AUTHOR ARCHIVE</div>
-                    </div>
+        <div class="back-header">
+            <span>B-SIDE REMIXES</span>
+            <span class="b-gold">DIGITAL PRESS</span>
+        </div>
+        
+        <div class="track-list-container">
+            <!-- TRK 1 -->
+            <div class="track-row">
+                <div class="qr-box"><div id="qr-t1"></div></div>
+                <div class="track-info">
+                    <div class="track-meta-en">TRACK.01 / YOHAKU</div>
+                    <div class="track-meta-ja">ZINE : 違和感と余白</div>
                 </div>
             </div>
+            <!-- TRK 2 -->
+            <div class="track-row">
+                <div class="qr-box"><div id="qr-t2"></div></div>
+                <div class="track-info">
+                    <div class="track-meta-en">TRACK.02 / HIRAMEKI</div>
+                    <div class="track-meta-ja">ZINE : 違和感と閃き</div>
+                </div>
+            </div>
+            <!-- TRK 3 -->
+            <div class="track-row">
+                <div class="qr-box"><div id="qr-t3"></div></div>
+                <div class="track-info">
+                    <div class="track-meta-en">TRACK.03 / UCI_V</div>
+                    <div class="track-meta-ja">UCI構想の記録</div>
+                </div>
+            </div>
+            <!-- TRK 4 -->
+            <div class="track-row">
+                <div class="qr-box"><div id="qr-t4"></div></div>
+                <div class="track-info">
+                    <div class="track-meta-en">TRACK.04 / PROFILE</div>
+                    <div class="track-meta-ja">AUTHOR ARCHIVE</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="back-footer-bar">
+            ALL RIGHTS RESERVED. SCAN THE CODE TO PLAY THE CUTS.
         </div>
     </div>
 
 <script>
-// 名刺サイズのB面グリッドに合わせた、スキャン感度の高いリアルQR生成
+// QRコードの解像度とサイズ調整（読み取り精度MAX）
 const qrSize = 44;
 
-new QRCode(document.getElementById("dj-qr1"), {
+new QRCode(document.getElementById("qr-t1"), {
     text: "https://zineprot.vercel.app/",
     width: qrSize,
     height: qrSize,
     correctLevel: QRCode.CorrectLevel.M
 });
 
-new QRCode(document.getElementById("dj-qr2"), {
+new QRCode(document.getElementById("qr-t2"), {
     text: "https://zine2-pi.vercel.app/",
     width: qrSize,
     height: qrSize,
     correctLevel: QRCode.CorrectLevel.M
 });
 
-new QRCode(document.getElementById("dj-qr3"), {
+new QRCode(document.getElementById("qr-t3"), {
     text: "https://ucizine.vercel.app/",
     width: qrSize,
     height: qrSize,
     correctLevel: QRCode.CorrectLevel.M
 });
 
-new QRCode(document.getElementById("dj-qr4"), {
+new QRCode(document.getElementById("qr-t4"), {
     text: "https://cheerful-dodol-f6885d.netlify.app/",
     width: qrSize,
     height: qrSize,
