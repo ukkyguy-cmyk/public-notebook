@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>公務員の覚書 — PUBLIC NOTEBOOK</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Archivo+Black&family=Shippori+Mincho:wght@400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -13,525 +12,439 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-
 body{
-  background:#0e0c0a;
-  color:#ede5d4;
+  background:#08070a;color:#ede5d4;
   font-family:'Shippori Mincho',serif;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  cursor:crosshair;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:crosshair;
 }
-
-/* ===== GRAIN ===== */
 body::before{
-  content:'';
-  position:fixed;inset:0;
-  pointer-events:none;z-index:9999;
-  opacity:.55;
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.15;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   mix-blend-mode:overlay;
 }
 
-/* ===== LIVE HUD STRIP (top) ===== */
-.hud{
-  position:fixed;
-  top:0;left:0;right:0;
-  height:36px;
-  background:#0e0c0a;
-  border-bottom:1px solid rgba(237,229,212,.08);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 24px;
-  z-index:8000;
-  font-family:'Space Mono',monospace;
-  font-size:.62rem;
-  color:rgba(237,229,212,.35);
-  letter-spacing:.12em;
-}
-
-.hud-left{display:flex;align-items:center;gap:18px;}
-.hud-right{display:flex;align-items:center;gap:18px;}
-
-/* REC dot */
-.rec-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:#e03030;
-  box-shadow:0 0 6px #e03030;
-  animation:rec-blink 1.2s ease-in-out infinite;
-}
-@keyframes rec-blink{0%,100%{opacity:1;box-shadow:0 0 8px #e03030;}50%{opacity:.2;box-shadow:none;}}
-
+/* HUD */
+.hud{position:fixed;top:0;left:0;right:0;height:36px;background:#0e0c0a;border-bottom:1px solid rgba(237,229,212,.08);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:8000;font-family:'Space Mono',monospace;font-size:.62rem;color:rgba(237,229,212,.35);letter-spacing:.12em;}
+.hud-left,.hud-right{display:flex;align-items:center;gap:18px;}
+.rec-dot{width:8px;height:8px;border-radius:50%;background:#e03030;box-shadow:0 0 6px #e03030;animation:rec-blink 1.2s ease-in-out infinite;}
+@keyframes rec-blink{0%,100%{opacity:1;}50%{opacity:.15;}}
 .timecode{font-variant-numeric:tabular-nums;}
-
-/* VU meter */
 .vu-wrap{display:flex;align-items:flex-end;gap:2px;height:16px;}
-.vu-bar{
-  width:3px;
-  background:#b8924a;
-  border-radius:1px;
-  animation:vu-bounce var(--d,.4s) ease-in-out infinite alternate;
-}
+.vu-bar{width:3px;background:#b8924a;border-radius:1px;animation:vu-bounce var(--d,.4s) ease-in-out infinite alternate;}
 @keyframes vu-bounce{from{height:3px;}to{height:var(--h,12px);}}
 
-/* ===== SCRATCH LINES ===== */
-.scratch{
-  position:fixed;top:0;bottom:0;width:1px;
-  background:linear-gradient(to bottom,transparent,rgba(237,229,212,.06) 30%,rgba(237,229,212,.10) 55%,rgba(237,229,212,.05) 80%,transparent);
-  pointer-events:none;z-index:9990;
-}
+/* SCRATCH */
+.scratch{position:fixed;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(237,229,212,.06) 30%,rgba(237,229,212,.10) 55%,rgba(237,229,212,.05) 80%,transparent);pointer-events:none;z-index:9990;}
 .scratch:nth-child(1){left:18%;}
 .scratch:nth-child(2){left:47%;opacity:.4;}
 .scratch:nth-child(3){left:79%;opacity:.25;}
 
-/* ===== LAYOUT ===== */
-section{padding:130px 8%;position:relative;}
+.groove-divider{width:100%;height:1px;background:repeating-linear-gradient(to right,rgba(184,146,74,.12) 0,rgba(184,146,74,.04) 3px,transparent 4px,transparent 8px);}
 .container{max-width:1100px;margin:auto;}
-
-/* ===== HERO ===== */
-.hero{
-  min-height:100vh;
-  display:flex;align-items:center;
-  padding-top:36px;
-  overflow:hidden;
-  position:relative;
-  border-bottom:1px solid rgba(237,229,212,.06);
-}
-
-/* tape marker */
-.tape{
-  position:absolute;
-  top:80px;right:8%;
-  background:#b8924a;
-  color:#0e0c0a;
-  font-family:'Space Mono',monospace;
-  font-size:.6rem;
-  letter-spacing:.2em;
-  padding:4px 14px;
-  transform:rotate(1.5deg);
-  box-shadow:2px 2px 0 rgba(0,0,0,.5);
-  z-index:10;
-}
-
-/* annotation arrow */
-.annotation{
-  position:absolute;
-  bottom:100px;left:8%;
-  font-family:'Space Mono',monospace;
-  font-size:.65rem;
-  color:rgba(237,229,212,.3);
-  letter-spacing:.08em;
-  display:flex;align-items:center;gap:8px;
-}
-.annotation::before{
-  content:'→';
-  font-size:1rem;
-  color:#b8924a;
-}
-
-.hero-label{
-  font-family:'Space Mono',monospace;
-  letter-spacing:.35em;
-  font-size:.72rem;
-  color:#b8924a;
-  margin-bottom:24px;
-  display:flex;align-items:center;gap:12px;
-}
-.hero-label::before{
-  content:'';
-  display:inline-block;
-  width:24px;height:1px;
-  background:#b8924a;
-}
-
-/* MAIN TITLE — Archivo Black + Black Han Sans mix */
-.hero-h1{
-  line-height:.88;
-  margin-bottom:40px;
-  position:relative;
-}
-
-.h1-en{
-  font-family:'Archivo Black',sans-serif;
-  font-size:clamp(4rem,10vw,9rem);
-  letter-spacing:-.01em;
-  color:#ede5d4;
-  display:block;
-  /* ink bleed */
-  text-shadow:3px 0 0 rgba(237,229,212,.04),-2px 0 0 rgba(237,229,212,.03);
-}
-
-.h1-ja{
-  font-family:'Black Han Sans',sans-serif;
-  font-size:clamp(2.8rem,7vw,6rem);
-  letter-spacing:.08em;
-  color:#ede5d4;
-  display:block;
-}
-
-/* underline scribble */
-.h1-underline{
-  position:absolute;
-  bottom:-8px;left:0;
-  width:60%;height:2px;
-  background:repeating-linear-gradient(to right,#b8924a 0,#b8924a 6px,transparent 7px,transparent 11px);
-  opacity:.6;
-}
-
-.hero-sub{
-  color:rgba(237,229,212,.45);
-  font-size:.95rem;
-  line-height:2.3;
-  letter-spacing:.06em;
-  border-left:2px solid #b8924a;
-  padding-left:18px;
-  max-width:380px;
-}
-
-/* ===== RECORD ===== */
-.player-wrap{
-  position:absolute;
-  right:-60px;top:50%;
-  transform:translateY(-50%);
-  width:520px;height:520px;
-}
-
-.record{
-  position:absolute;
-  inset:0;
-  border-radius:50%;
-  animation:spin-record var(--record-speed,3.2s) linear infinite;
-  background:
-    repeating-radial-gradient(
-      circle at center,
-      #1c1812 0px,#1c1812 1.2px,
-      #231e17 1.8px,#1c1812 2.8px,
-      #201b14 3.5px,#1c1812 5px
-    );
-  box-shadow:0 0 0 1px rgba(184,146,74,.08),0 20px 80px rgba(0,0,0,.9),inset 0 0 60px rgba(0,0,0,.5);
-}
-
-/* pitch wobble */
-@keyframes spin-record{
-  0%  {transform:rotate(0deg);}
-  49% {transform:rotate(176.4deg);}
-  50% {transform:rotate(180.5deg);}
-  99% {transform:rotate(358.8deg);}
-  100%{transform:rotate(360deg);}
-}
-
-.record::before{
-  content:'';position:absolute;inset:0;border-radius:50%;
-  background:conic-gradient(from 0deg,transparent 0deg,rgba(237,229,212,.04) 25deg,transparent 50deg,rgba(237,229,212,.06) 110deg,transparent 140deg,rgba(237,229,212,.03) 200deg,transparent 240deg,rgba(237,229,212,.05) 310deg,transparent 360deg);
-}
-
-.label-center{
-  position:absolute;
-  top:50%;left:50%;
-  width:130px;height:130px;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  background:radial-gradient(circle at 38% 32%,#2e2410,#14100a);
-  border:1px solid rgba(184,146,74,.18);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:3px;
-  animation:counter-spin var(--record-speed,3.2s) linear infinite;
-  overflow:hidden;
-}
-.label-center::after{
-  content:'';position:absolute;
-  width:9px;height:9px;border-radius:50%;
-  background:#0e0c0a;border:1px solid rgba(237,229,212,.18);
-}
-.lbl-t{font-family:'Archivo Black',sans-serif;font-size:.52rem;letter-spacing:.25em;color:#b8924a;}
-.lbl-n{font-family:'Space Mono',monospace;font-style:italic;font-size:.95rem;color:rgba(237,229,212,.6);}
-.lbl-r{font-family:'Space Mono',monospace;font-size:.42rem;letter-spacing:.3em;color:rgba(237,229,212,.25);}
-
-@keyframes counter-spin{
-  from{transform:translate(-50%,-50%) rotate(0deg);}
-  to  {transform:translate(-50%,-50%) rotate(-360deg);}
-}
-
-.tonearm{
-  position:absolute;top:20px;right:50px;
-  width:190px;height:3px;
-  background:linear-gradient(to right,#3a3020,#b8924a,#7a5a20);
-  transform-origin:right center;
-  transform:rotate(-32deg);
-  border-radius:2px;
-  animation:arm-idle 9s ease-in-out infinite;
-}
-.tonearm::before{
-  content:'';position:absolute;right:0;top:-9px;
-  width:20px;height:20px;border-radius:50%;
-  background:radial-gradient(circle at 38% 32%,#5a4828,#2a1e0a);
-  border:1px solid rgba(184,146,74,.35);
-}
-.tonearm::after{
-  content:'';position:absolute;left:-8px;top:-5px;
-  width:20px;height:12px;
-  background:linear-gradient(135deg,#4a3818,#2a1e0a);
-  clip-path:polygon(0 50%,100% 0,100% 100%);
-}
-@keyframes arm-idle{
-  0%,100%{transform:rotate(-32deg);}
-  50%    {transform:rotate(-30deg);}
-}
-
-/* ===== CANVAS WAVEFORM ===== */
-.wave-wrap{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  height:80px;
-  pointer-events:none;
-  z-index:1;
-  opacity:.35;
-}
-#waveCanvas{width:100%;height:80px;display:block;}
-
-/* ===== GROOVE DIVIDER ===== */
-.groove-divider{
-  width:100%;height:1px;
-  background:repeating-linear-gradient(to right,rgba(184,146,74,.12) 0,rgba(184,146,74,.04) 3px,transparent 4px,transparent 8px);
-}
-
-/* ===== SECTION TRACK NUM ===== */
-.track-num{
-  font-family:'Space Mono',monospace;
-  font-size:.65rem;letter-spacing:.4em;
-  color:#b8924a;margin-bottom:22px;
-  display:flex;align-items:center;gap:10px;
-}
+.track-num{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.4em;color:#b8924a;margin-bottom:22px;display:flex;align-items:center;gap:10px;}
 .track-num::after{content:'';flex:1;max-width:50px;height:1px;background:rgba(184,146,74,.25);}
-
-/* ===== CONCEPT ===== */
-.big-title{
-  font-family:'Archivo Black',sans-serif;
-  font-size:clamp(3.5rem,8vw,7.5rem);
-  line-height:.9;
-  letter-spacing:-.01em;
-  margin-bottom:12px;
-  color:#ede5d4;
-}
-.big-title-ja{
-  font-family:'Black Han Sans',sans-serif;
-  font-size:clamp(2rem,5vw,4.5rem);
-  letter-spacing:.1em;
-  line-height:1;
-  margin-bottom:30px;
-  color:rgba(237,229,212,.85);
-}
-.text{
-  max-width:660px;
-  color:rgba(237,229,212,.45);
-  line-height:2.3;font-size:.95rem;
-  letter-spacing:.05em;
-}
-
-/* handwritten circle annotation */
-.circle-note{
-  display:inline-block;
-  border:1.5px solid rgba(184,146,74,.4);
-  border-radius:50%;
-  padding:2px 8px;
-  font-family:'Space Mono',monospace;
-  font-size:.65rem;
-  letter-spacing:.1em;
-  color:#b8924a;
-  transform:rotate(-2deg);
-}
-
-/* ===== ZINE CARDS ===== */
-.zine-grid{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:2px;margin-top:50px;
-}
-.zine-card{
-  background:#100e0b;
-  padding:45px 38px;
-  position:relative;
-  border:1px solid rgba(237,229,212,.04);
-  overflow:hidden;
-  transition:border-color .3s;
-}
-.zine-card:hover{border-color:rgba(184,146,74,.18);}
-.zine-card:hover .mini-record{opacity:.2;transform:scale(1.04) rotate(20deg);}
-
-.mini-record{
-  position:absolute;right:-30px;bottom:-30px;
-  width:160px;height:160px;border-radius:50%;
-  opacity:.07;
-  transition:opacity .4s,transform .6s;
-  background:repeating-radial-gradient(circle at center,#1c1812 0px,#1c1812 1px,#231e17 1.5px,#1c1812 2.5px);
-}
-.mini-record::after{
-  content:'';position:absolute;inset:35%;
-  border-radius:50%;background:#0e0c0a;
-}
-
-.zine-en{
-  font-family:'Archivo Black',sans-serif;
-  font-size:clamp(2rem,4vw,3.2rem);
-  line-height:.92;
-  margin-bottom:10px;
-  letter-spacing:-.01em;
-}
-.zine-ja{
-  font-family:'Black Han Sans',sans-serif;
-  font-size:1rem;letter-spacing:.2em;
-  color:#b8924a;margin-bottom:22px;
-}
-.zine-desc{
-  font-size:.88rem;color:rgba(237,229,212,.38);
-  line-height:2;margin-bottom:30px;
-}
-.zine-footer{display:flex;align-items:center;gap:18px;}
-.qr-box{background:white;padding:8px;}
-.btn{
-  display:inline-block;padding:9px 26px;
-  border:1px solid rgba(184,146,74,.45);
-  text-decoration:none;color:#ede5d4;
-  font-family:'Space Mono',monospace;
-  letter-spacing:.2em;font-size:.72rem;
-  transition:.3s;
-}
+.text{max-width:660px;color:rgba(237,229,212,.45);line-height:2.3;font-size:.95rem;letter-spacing:.05em;}
+.btn{display:inline-block;padding:9px 26px;border:1px solid rgba(184,146,74,.45);text-decoration:none;color:#ede5d4;font-family:'Space Mono',monospace;letter-spacing:.2em;font-size:.72rem;transition:.3s;}
 .btn:hover{background:#b8924a;color:#0e0c0a;border-color:#b8924a;}
-
-/* ===== UCI ===== */
-.uci-section{background:#0a0806;padding:130px 8%;position:relative;overflow:hidden;}
-.uci-bg{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Archivo Black',sans-serif;
-  font-size:clamp(8rem,18vw,16rem);
-  letter-spacing:.05em;
-  color:rgba(184,146,74,.035);
-  pointer-events:none;white-space:nowrap;overflow:hidden;
-}
-.uci-en{
-  font-family:'Space Mono',monospace;
-  font-size:.72rem;letter-spacing:.4em;
-  color:#b8924a;margin-bottom:24px;
-}
-.uci-title{
-  font-family:'Archivo Black',sans-serif;
-  font-size:clamp(3rem,7vw,6.5rem);
-  line-height:.9;letter-spacing:-.01em;
-  margin-bottom:8px;
-}
-.uci-title-ja{
-  font-family:'Black Han Sans',sans-serif;
-  font-size:clamp(1.8rem,4vw,3.5rem);
-  letter-spacing:.1em;margin-bottom:28px;
-  color:rgba(237,229,212,.75);
-}
-
-/* ===== AUTHOR ===== */
-.author-section{background:#100e0b;padding:130px 8%;}
-.author-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
-.author-name-big{
-  font-family:'Archivo Black',sans-serif;
-  font-size:clamp(3.5rem,8vw,7.5rem);
-  line-height:.88;letter-spacing:-.01em;
-}
-.author-kana{
-  font-family:'Black Han Sans',sans-serif;
-  font-size:1.2rem;letter-spacing:.35em;
-  color:#b8924a;margin-top:14px;margin-bottom:36px;
-}
-.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:32px;}
-.tag{
-  border:1px solid rgba(184,146,74,.22);
-  padding:4px 12px;
-  font-family:'Space Mono',monospace;
-  font-size:.62rem;letter-spacing:.12em;
-  color:rgba(237,229,212,.4);
-}
-
-/* ===== JOURNEY ===== */
-.journey-section{padding:130px 8%;text-align:center;background:#0e0c0a;}
-.journey-track{
-  display:flex;justify-content:center;
-  align-items:center;flex-wrap:wrap;
-  margin:50px 0;gap:0;
-}
-.j-step{display:flex;flex-direction:column;align-items:center;}
-.j-circle{
-  width:80px;height:80px;border-radius:50%;
-  border:1px solid rgba(184,146,74,.22);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Black Han Sans',sans-serif;
-  font-size:.88rem;letter-spacing:.08em;
-  color:rgba(237,229,212,.55);
-  background:radial-gradient(circle at center,#1a1510 0%,#0e0c0a 100%);
-  box-shadow:inset 0 0 0 8px rgba(0,0,0,.25),inset 0 0 0 18px rgba(184,146,74,.02);
-}
-.j-step:last-child .j-circle{
-  border-color:#b8924a;color:#b8924a;
-  box-shadow:0 0 18px rgba(184,146,74,.12),inset 0 0 0 8px rgba(0,0,0,.25);
-}
-.j-connector{
-  width:36px;height:1px;
-  background:repeating-linear-gradient(to right,rgba(184,146,74,.18) 0,rgba(184,146,74,.18) 3px,transparent 4px,transparent 7px);
-}
-
-/* ===== FOOTER ===== */
-.footer{
-  padding:120px 8% 80px;
-  border-top:1px solid rgba(237,229,212,.05);
-  position:relative;overflow:hidden;
-}
-.footer-bg-rec{
-  position:absolute;right:-80px;bottom:-80px;
-  width:360px;height:360px;border-radius:50%;opacity:.04;
-  background:repeating-radial-gradient(circle at center,#ede5d4 0px,#ede5d4 1px,transparent 1.5px,transparent 4px);
-}
-.footer-title{
-  font-family:'Archivo Black',sans-serif;
-  font-size:clamp(3rem,7vw,6.5rem);
-  letter-spacing:.02em;line-height:.9;
-  margin-bottom:20px;
-}
-.footer-sub{
-  font-family:'Space Mono',monospace;
-  font-style:italic;font-size:1rem;
-  color:rgba(237,229,212,.3);letter-spacing:.08em;
-}
-
-/* ===== SIDE LABELS ===== */
-.side-label{
-  position:absolute;left:1.5%;top:50%;
-  transform:translateY(-50%) rotate(-90deg);
-  transform-origin:center;
-  font-family:'Archivo Black',sans-serif;
-  font-size:5rem;letter-spacing:.15em;
-  color:rgba(237,229,212,.025);white-space:nowrap;pointer-events:none;
-}
-
-/* ===== FADE ===== */
+.qr-box{background:white;padding:8px;}
 .fade{opacity:0;transform:translateY(22px);transition:1s cubic-bezier(.16,1,.3,1);}
 .fade.show{opacity:1;transform:none;}
 
-/* ===== RESPONSIVE ===== */
+/* =====================
+   HERO
+===================== */
+.hero{min-height:100vh;display:flex;align-items:center;padding:36px 8% 0;overflow:hidden;position:relative;border-bottom:1px solid rgba(237,229,212,.06);}
+.tape{position:absolute;top:80px;right:8%;background:#b8924a;color:#0e0c0a;font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.2em;padding:4px 14px;transform:rotate(1.5deg);box-shadow:2px 2px 0 rgba(0,0,0,.5);z-index:10;}
+.annotation{position:absolute;bottom:100px;left:8%;font-family:'Space Mono',monospace;font-size:.65rem;color:rgba(237,229,212,.3);letter-spacing:.08em;display:flex;align-items:center;gap:8px;}
+.annotation::before{content:'→';font-size:1rem;color:#b8924a;}
+.hero-label{font-family:'Space Mono',monospace;letter-spacing:.35em;font-size:.72rem;color:#b8924a;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.hero-label::before{content:'';display:inline-block;width:24px;height:1px;background:#b8924a;}
+.hero-h1{line-height:.88;margin-bottom:40px;position:relative;}
+.h1-en{font-family:'Archivo Black',sans-serif;font-size:clamp(4rem,10vw,9rem);letter-spacing:-.01em;color:#ede5d4;display:block;text-shadow:3px 0 0 rgba(237,229,212,.04),-2px 0 0 rgba(237,229,212,.03);}
+.h1-ja{font-family:'Black Han Sans',sans-serif;font-size:clamp(2.8rem,7vw,6rem);letter-spacing:.08em;color:#ede5d4;display:block;}
+.h1-underline{position:absolute;bottom:-8px;left:0;width:60%;height:2px;background:repeating-linear-gradient(to right,#b8924a 0,#b8924a 6px,transparent 7px,transparent 11px);opacity:.6;}
+.hero-sub{color:rgba(237,229,212,.45);font-size:.95rem;line-height:2.3;letter-spacing:.06em;border-left:2px solid #b8924a;padding-left:18px;max-width:380px;}
+
+.player-wrap{position:absolute;right:-60px;top:50%;transform:translateY(-50%);width:520px;height:520px;}
+.record{position:absolute;inset:0;border-radius:50%;animation:spin-record 3.2s linear infinite;background:repeating-radial-gradient(circle at center,#1c1812 0px,#1c1812 1.2px,#231e17 1.8px,#1c1812 2.8px,#201b14 3.5px,#1c1812 5px);box-shadow:0 0 0 1px rgba(184,146,74,.08),0 20px 80px rgba(0,0,0,.9),inset 0 0 60px rgba(0,0,0,.5);}
+@keyframes spin-record{0%{transform:rotate(0deg);}49%{transform:rotate(176.4deg);}50%{transform:rotate(180.5deg);}99%{transform:rotate(358.8deg);}100%{transform:rotate(360deg);}}
+.record::before{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0deg,rgba(237,229,212,.04) 25deg,transparent 50deg,rgba(237,229,212,.06) 110deg,transparent 140deg,rgba(237,229,212,.03) 200deg,transparent 240deg,rgba(237,229,212,.05) 310deg,transparent 360deg);}
+.label-center{position:absolute;top:50%;left:50%;width:130px;height:130px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 38% 32%,#2e2410,#14100a);border:1px solid rgba(184,146,74,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;animation:counter-spin 3.2s linear infinite;overflow:hidden;}
+.label-center::after{content:'';position:absolute;width:9px;height:9px;border-radius:50%;background:#0e0c0a;border:1px solid rgba(237,229,212,.18);}
+.lbl-t{font-family:'Archivo Black',sans-serif;font-size:.52rem;letter-spacing:.25em;color:#b8924a;}
+.lbl-n{font-family:'Space Mono',monospace;font-style:italic;font-size:.95rem;color:rgba(237,229,212,.6);}
+.lbl-r{font-family:'Space Mono',monospace;font-size:.42rem;letter-spacing:.3em;color:rgba(237,229,212,.25);}
+@keyframes counter-spin{from{transform:translate(-50%,-50%) rotate(0deg);}to{transform:translate(-50%,-50%) rotate(-360deg);}}
+.tonearm{position:absolute;top:20px;right:50px;width:190px;height:3px;background:linear-gradient(to right,#3a3020,#b8924a,#7a5a20);transform-origin:right center;transform:rotate(-32deg);border-radius:2px;animation:arm-idle 9s ease-in-out infinite;}
+.tonearm::before{content:'';position:absolute;right:0;top:-9px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#5a4828,#2a1e0a);border:1px solid rgba(184,146,74,.35);}
+.tonearm::after{content:'';position:absolute;left:-8px;top:-5px;width:20px;height:12px;background:linear-gradient(135deg,#4a3818,#2a1e0a);clip-path:polygon(0 50%,100% 0,100% 100%);}
+@keyframes arm-idle{0%,100%{transform:rotate(-32deg);}50%{transform:rotate(-30deg);}}
+.wave-wrap{position:absolute;bottom:0;left:0;right:0;height:80px;pointer-events:none;z-index:1;opacity:.35;}
+#waveCanvas{width:100%;height:80px;display:block;}
+
+/* =====================
+   CONCEPT
+===================== */
+.concept-section{padding:130px 8%;background:#0e0c0a;position:relative;}
+.side-label{position:absolute;left:1.5%;top:50%;transform:translateY(-50%) rotate(-90deg);transform-origin:center;font-family:'Archivo Black',sans-serif;font-size:5rem;letter-spacing:.15em;color:rgba(237,229,212,.025);white-space:nowrap;pointer-events:none;}
+.big-title{font-family:'Archivo Black',sans-serif;font-size:clamp(3.5rem,8vw,7.5rem);line-height:.9;letter-spacing:-.01em;margin-bottom:12px;color:#ede5d4;}
+.big-title-ja{font-family:'Black Han Sans',sans-serif;font-size:clamp(2rem,5vw,4.5rem);letter-spacing:.1em;line-height:1;margin-bottom:30px;color:rgba(237,229,212,.85);}
+.circle-note{display:inline-block;border:1.5px solid rgba(184,146,74,.4);border-radius:50%;padding:2px 8px;font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.1em;color:#b8924a;transform:rotate(-2deg);}
+
+/* =====================
+   RECORD SHELF
+===================== */
+.shelf-section{
+  padding:100px 8% 120px;
+  background:#0b0907;
+  position:relative;
+  overflow:hidden;
+}
+
+/* 棚の木目ライン */
+.shelf-section::after{
+  content:'';
+  position:absolute;
+  left:0;right:0;
+  bottom:60px;
+  height:18px;
+  background:linear-gradient(to bottom,#1e160c,#2a1e0e 40%,#1a1208);
+  box-shadow:0 -4px 24px rgba(0,0,0,.6),0 4px 12px rgba(0,0,0,.5);
+}
+
+.shelf-label{
+  font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.4em;
+  color:#b8924a;margin-bottom:48px;display:flex;align-items:center;gap:10px;
+}
+.shelf-label::after{content:'';flex:1;max-width:50px;height:1px;background:rgba(184,146,74,.25);}
+
+/* ジャケット並び */
+.jacket-row{
+  display:flex;
+  gap:0;
+  align-items:flex-end;
+  padding-bottom:80px; /* 棚の木目の上 */
+  position:relative;
+  z-index:1;
+}
+
+/* 個別ジャケット */
+.jacket{
+  flex:1;
+  min-width:0;
+  position:relative;
+  cursor:pointer;
+  transform:rotate(-1.5deg) translateY(4px);
+  transform-origin:bottom center;
+  transition:transform .35s cubic-bezier(.16,1,.3,1), z-index 0s;
+  z-index:1;
+}
+.jacket:nth-child(2){transform:rotate(.8deg) translateY(2px);}
+.jacket:nth-child(3){transform:rotate(-1deg) translateY(6px);}
+.jacket:nth-child(4){transform:rotate(1.2deg) translateY(3px);}
+
+.jacket:hover{
+  transform:rotate(0deg) translateY(-28px) !important;
+  z-index:10;
+}
+.jacket:hover .jacket-inner{
+  box-shadow:6px -8px 40px rgba(0,0,0,.85), 0 0 0 1px rgba(184,146,74,.25);
+}
+
+/* ジャケット本体 */
+.jacket-inner{
+  aspect-ratio:1/1;
+  background:#141210;
+  border:1px solid rgba(237,229,212,.06);
+  position:relative;
+  overflow:hidden;
+  box-shadow:4px -4px 20px rgba(0,0,0,.7);
+  transition:box-shadow .35s cubic-bezier(.16,1,.3,1);
+}
+
+/* スパイン（背表紙ライン） */
+.jacket-spine{
+  position:absolute;left:0;top:0;bottom:0;width:6px;
+  background:linear-gradient(to right,rgba(0,0,0,.5),transparent);
+  z-index:2;
+}
+
+/* ジャケットアート（抽象的なビジュアル） */
+.jacket-art{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ジャケット上のテキスト */
+.jacket-meta{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:20px 16px 14px;
+  background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.5) 60%,transparent 100%);
+  z-index:3;
+}
+.jacket-vol{
+  font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.35em;
+  color:rgba(184,146,74,.6);margin-bottom:4px;
+}
+.jacket-title{
+  font-family:'Archivo Black',sans-serif;
+  font-size:clamp(.9rem,2vw,1.4rem);
+  line-height:1;letter-spacing:-.01em;
+  color:#ede5d4;margin-bottom:3px;
+}
+.jacket-title-ja{
+  font-family:'Black Han Sans',sans-serif;
+  font-size:.72rem;letter-spacing:.15em;color:#b8924a;
+}
+
+/* ジャケット右下のREADボタン（ホバー時に出現） */
+.jacket-cta{
+  position:absolute;top:14px;right:14px;
+  font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.2em;
+  padding:5px 12px;border:1px solid rgba(184,146,74,.55);
+  color:#b8924a;background:rgba(14,12,10,.8);
+  opacity:0;transform:translateY(-4px);
+  transition:.25s;z-index:4;
+  text-decoration:none;
+}
+.jacket:hover .jacket-cta{opacity:1;transform:translateY(0);}
+
+/* Vol.1 — 余白テクスチャ（ドット格子＋空白） */
+.art-vol1{
+  background:#0f0d0b;
+  background-image:
+    radial-gradient(rgba(184,146,74,.16) 1px, transparent 1.4px),
+    radial-gradient(ellipse 50% 40% at 70% 25%, rgba(237,229,212,.05) 0%, transparent 70%);
+  background-size:22px 22px, 100% 100%;
+  background-position:0 0, 0 0;
+}
+
+/* Vol.2 — 閃き（斜線） */
+.art-vol2{
+  background:#0d0c10;
+  background-image:
+    repeating-linear-gradient(115deg, rgba(184,146,74,.10) 0px, rgba(184,146,74,.10) 1.5px, transparent 1.5px, transparent 26px),
+    linear-gradient(115deg, transparent 55%, rgba(184,146,74,.22) 56%, transparent 57%);
+}
+
+/* Vol.3 — 都市格子 */
+.art-vol3{
+  background:#080c0f;
+  background-image:
+    linear-gradient(rgba(100,170,210,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100,170,210,.08) 1px, transparent 1px),
+    radial-gradient(rgba(100,180,220,.4) 1.5px, transparent 2px);
+  background-size:36px 36px, 36px 36px, 72px 72px;
+  background-position:0 0, 0 0, 14px 22px;
+}
+
+/* Vol.4 — PANDEMIC（最重量、暗色・伝播） */
+.jacket--pl .jacket-inner{background:#050407;}
+.jacket--pl{transform:rotate(.5deg) translateY(1px) !important;}
+.jacket--pl:hover{transform:rotate(0deg) translateY(-28px) !important;}
+.art-vol4{
+  background:#050407;
+  background-image:
+    repeating-radial-gradient(circle at 50% 42%, transparent 0, transparent 18px, rgba(130,60,200,.10) 19px, rgba(130,60,200,.10) 20px),
+    radial-gradient(circle at 50% 42%, rgba(184,146,74,.35) 0%, rgba(184,146,74,.35) 4px, transparent 5px);
+}
+
+/* アートエリアの隅ラベル */
+.jacket-art::after{
+  content:attr(data-label);
+  position:absolute;left:14px;top:14px;
+  font-family:'Space Mono',monospace;
+  font-size:.62rem;letter-spacing:.25em;
+  opacity:.25;
+}
+.art-vol1::after{color:#b8924a;}
+.art-vol2::after{color:#b8924a;}
+.art-vol3::after{color:#64b4dc;}
+.art-vol4::after{color:#9450c8;}
+.jacket-qr{
+  position:absolute;bottom:70px;left:50%;transform:translateX(-50%) translateY(8px);
+  background:white;padding:8px;
+  opacity:0;pointer-events:none;transition:.25s;z-index:5;
+  box-shadow:0 4px 20px rgba(0,0,0,.6);
+}
+.jacket:hover .jacket-qr{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* =====================
+   UCI SECTION
+===================== */
+.uci-section{background:#0a0806;padding:130px 8%;position:relative;overflow:hidden;}
+.uci-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-size:clamp(8rem,18vw,16rem);letter-spacing:.05em;color:rgba(184,146,74,.032);pointer-events:none;white-space:nowrap;overflow:hidden;}
+.uci-en{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.4em;color:#b8924a;margin-bottom:24px;}
+.uci-title{font-family:'Archivo Black',sans-serif;font-size:clamp(3rem,7vw,6.5rem);line-height:.9;letter-spacing:-.01em;margin-bottom:8px;}
+.uci-title-ja{font-family:'Black Han Sans',sans-serif;font-size:clamp(1.8rem,4vw,3.5rem);letter-spacing:.1em;margin-bottom:28px;color:rgba(237,229,212,.75);}
+
+/* =====================
+   PANDEMIC LOGIC — HEAVY
+===================== */
+.pl-section{
+  background:#050407;
+  padding:150px 8%;
+  position:relative;overflow:hidden;
+  border-top:1px solid rgba(120,80,180,.08);
+  border-bottom:1px solid rgba(120,80,180,.08);
+}
+/* 重層的な背景 */
+.pl-section::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 50%, rgba(60,20,90,.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 80% at 10% 80%, rgba(30,10,50,.25) 0%, transparent 60%);
+  pointer-events:none;
+}
+.pl-ghost{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;
+  font-family:'Archivo Black',sans-serif;
+  font-size:clamp(5rem,13vw,12rem);
+  letter-spacing:.04em;line-height:.85;
+  color:rgba(184,146,74,.022);
+  pointer-events:none;white-space:nowrap;overflow:hidden;
+  padding:0 8%;
+}
+.pl-inner{position:relative;z-index:1;max-width:720px;}
+.pl-eyebrow{
+  font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.4em;
+  color:rgba(184,146,74,.55);margin-bottom:28px;
+  display:flex;align-items:center;gap:10px;
+}
+.pl-eyebrow::after{content:'';flex:1;max-width:50px;height:1px;background:rgba(184,146,74,.2);}
+.pl-title{
+  font-family:'Archivo Black',sans-serif;
+  font-size:clamp(4rem,10vw,9.5rem);
+  line-height:.85;letter-spacing:-.02em;
+  color:#ede5d4;
+  margin-bottom:10px;
+  text-shadow:0 0 80px rgba(100,40,160,.15);
+}
+.pl-title-ja{
+  font-family:'Black Han Sans',sans-serif;
+  font-size:clamp(1.6rem,3.5vw,3rem);
+  letter-spacing:.15em;
+  color:rgba(237,229,212,.45);
+  margin-bottom:48px;
+}
+.pl-body{
+  max-width:520px;
+  color:rgba(237,229,212,.38);
+  line-height:2.5;font-size:.95rem;letter-spacing:.05em;
+  margin-bottom:48px;
+  border-left:2px solid rgba(184,146,74,.2);
+  padding-left:20px;
+}
+/* フェーズリスト */
+.phase-list{
+  display:flex;flex-direction:column;gap:0;
+  margin-bottom:48px;
+  border:1px solid rgba(184,146,74,.1);
+  max-width:400px;
+}
+.phase-item{
+  display:flex;align-items:center;gap:20px;
+  padding:14px 20px;
+  border-bottom:1px solid rgba(184,146,74,.06);
+  font-family:'Space Mono',monospace;
+  font-size:.7rem;letter-spacing:.3em;
+  color:rgba(237,229,212,.3);
+  transition:.3s;
+}
+.phase-item:last-child{border-bottom:none;}
+.phase-item:hover{color:#b8924a;background:rgba(184,146,74,.04);}
+.phase-num{
+  font-size:.5rem;color:rgba(184,146,74,.35);
+  width:20px;flex-shrink:0;
+}
+.pl-footer{display:flex;align-items:center;gap:24px;}
+
+/* =====================
+   AUTHOR
+===================== */
+.author-section{background:#100e0b;padding:130px 8%;}
+.author-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.author-name-big{font-family:'Archivo Black',sans-serif;font-size:clamp(3.5rem,8vw,7.5rem);line-height:.88;letter-spacing:-.01em;}
+.author-kana{font-family:'Black Han Sans',sans-serif;font-size:1.2rem;letter-spacing:.35em;color:#b8924a;margin-top:14px;margin-bottom:36px;}
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:32px;}
+.tag{border:1px solid rgba(184,146,74,.22);padding:4px 12px;font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:rgba(237,229,212,.4);}
+
+/* =====================
+   JOURNEY
+===================== */
+.journey-section{padding:130px 8%;text-align:center;background:#0e0c0a;}
+.journey-track{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;margin:50px 0;gap:0;}
+.j-step{display:flex;flex-direction:column;align-items:center;}
+.j-circle{width:80px;height:80px;border-radius:50%;border:1px solid rgba(184,146,74,.22);display:flex;align-items:center;justify-content:center;font-family:'Black Han Sans',sans-serif;font-size:.88rem;letter-spacing:.08em;color:rgba(237,229,212,.55);background:radial-gradient(circle at center,#1a1510 0%,#0e0c0a 100%);box-shadow:inset 0 0 0 8px rgba(0,0,0,.25);}
+.j-step:last-child .j-circle{border-color:#b8924a;color:#b8924a;box-shadow:0 0 18px rgba(184,146,74,.12);}
+.j-connector{width:36px;height:1px;background:repeating-linear-gradient(to right,rgba(184,146,74,.18) 0,rgba(184,146,74,.18) 3px,transparent 4px,transparent 7px);}
+
+/* FOOTER */
+.footer{padding:120px 8% 80px;border-top:1px solid rgba(237,229,212,.05);position:relative;overflow:hidden;}
+.footer-bg-rec{position:absolute;right:-80px;bottom:-80px;width:360px;height:360px;border-radius:50%;opacity:.04;background:repeating-radial-gradient(circle at center,#ede5d4 0px,#ede5d4 1px,transparent 1.5px,transparent 4px);}
+.footer-title{font-family:'Archivo Black',sans-serif;font-size:clamp(3rem,7vw,6.5rem);letter-spacing:.02em;line-height:.9;margin-bottom:20px;}
+.footer-sub{font-family:'Space Mono',monospace;font-style:italic;font-size:1rem;color:rgba(237,229,212,.3);letter-spacing:.08em;}
+
 @media(max-width:860px){
-  .player-wrap{opacity:.18;right:-220px;width:400px;height:400px;}
-  .zine-grid{grid-template-columns:1fr;}
+  .hero{flex-direction:column;padding-top:90px;padding-bottom:50px;gap:30px;}
+  .hero .container{width:100%;}
+  .player-wrap{
+    position:relative;
+    right:auto;top:auto;left:auto;
+    width:520px;height:520px;
+    transform:scale(.5);
+    transform-origin:center center;
+    margin:-130px auto;
+    opacity:1;
+  }
   .author-grid{grid-template-columns:1fr;gap:40px;}
-  .side-label{display:none;}
   .j-circle{width:60px;height:60px;font-size:.78rem;}
   .j-connector{width:20px;}
+
+  /* JACKET SHELF — 2x2 grid on mobile */
+  .jacket-row{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    padding-bottom:40px;
+  }
+  .jacket,
+  .jacket:nth-child(2),
+  .jacket:nth-child(3),
+  .jacket:nth-child(4){
+    transform:none;
+  }
+  .jacket:hover{
+    transform:none !important;
+  }
+  .jacket-meta{padding:14px 12px 12px;}
+  .jacket-vol{font-size:.5rem;letter-spacing:.25em;}
+  .jacket-title{
+    font-size:.92rem;
+    line-height:1.15;
+    white-space:normal;
+    word-break:keep-all;
+  }
+  .jacket-title-ja{
+    font-size:.66rem;
+    letter-spacing:.1em;
+    white-space:nowrap;
+  }
+  .jacket-art::after{font-size:.5rem;}
+  .jacket-qr{display:none;}
+
+  .pl-title{font-size:clamp(3rem,12vw,6rem);}
 }
 </style>
 </head>
 <body>
 
-<!-- scratches -->
 <div class="scratch"></div>
 <div class="scratch"></div>
 <div class="scratch"></div>
 
-<!-- ===== HUD ===== -->
+<!-- HUD -->
 <div class="hud">
   <div class="hud-left">
     <div class="rec-dot"></div>
@@ -546,28 +459,21 @@ section{padding:130px 8%;position:relative;}
   </div>
 </div>
 
-<!-- ===== HERO ===== */
+<!-- HERO -->
 <section class="hero">
   <div class="tape">TAKE 01 — PUBLIC NOTEBOOK</div>
   <div class="annotation">scroll to play</div>
-
   <div class="container" style="display:flex;align-items:center;width:100%;position:relative;z-index:2;">
     <div style="max-width:540px;">
       <div class="hero-label">PUBLIC NOTEBOOK</div>
       <div class="hero-h1">
         <span class="h1-en">PUBLIC</span>
-        <span class="h1-ja">公務員の覚書</span>
+        <span class="h1-ja">公共の覚書</span>
         <div class="h1-underline"></div>
       </div>
-      <p class="hero-sub">
-        違和感から始まる。<br>
-        閃きへ向かう。<br>
-        認知を共有する未来を考える。
-      </p>
+      <p class="hero-sub">違和感から始まる。<br>閃きへ向かう。<br>認知を共有する未来を考える。</p>
     </div>
   </div>
-
-  <!-- Record -->
   <div class="player-wrap">
     <div class="record">
       <div class="label-center">
@@ -578,17 +484,13 @@ section{padding:130px 8%;position:relative;}
     </div>
     <div class="tonearm"></div>
   </div>
-
-  <!-- Waveform -->
-  <div class="wave-wrap">
-    <canvas id="waveCanvas"></canvas>
-  </div>
+  <div class="wave-wrap"><canvas id="waveCanvas"></canvas></div>
 </section>
 
 <div class="groove-divider"></div>
 
-<!-- ===== CONCEPT ===== -->
-<section class="fade" style="background:#0e0c0a;">
+<!-- CONCEPT -->
+<section class="concept-section fade">
   <div class="side-label">SIDE A</div>
   <div class="container">
     <div class="track-num">TRACK 01 — CONCEPT</div>
@@ -599,64 +501,96 @@ section{padding:130px 8%;position:relative;}
       <span class="circle-note">閃き</span>&nbsp;&nbsp;
       <span class="circle-note">認知</span>&nbsp;&nbsp;
       <span class="circle-note">共有</span>
-    </div>
-    <br>
-    <p class="text">
-      世界はひとつに見える。<br><br>
-      けれど、人が見ている世界は同じではない。<br><br>
-      その先にある新しい公共。<br><br>
-      これは認知をめぐる探究の記録。
-    </p>
+    </div><br>
+    <p class="text">世界はひとつに見える。<br><br>けれど、人が見ている世界は同じではない。<br><br>その先にあるもの。<br><br>これは認知をめぐる探究の記録。</p>
   </div>
 </section>
 
 <div class="groove-divider"></div>
 
-<!-- ===== ZINES ===== -->
-<section style="padding:130px 8%;background:#0e0c0a;" class="fade">
+<!-- RECORD SHELF -->
+<section class="shelf-section fade">
   <div class="container">
-    <div class="track-num">TRACK 02 & 03 — ZINES</div>
-    <div class="zine-grid">
-      <div class="zine-card">
-        <div class="mini-record"></div>
-        <div class="zine-en">IWAKAN<br>&amp; YOHAKU</div>
-        <div class="zine-ja">違和感と余白</div>
-        <p class="zine-desc">違和感は問いの種。余白は新しい認知の入口。<br>見過ごされがちな感覚から、世界を見直していく。</p>
-        <div class="zine-footer">
-          <div id="qr1" class="qr-box"></div>
-          <a class="btn" href="https://zineprot.vercel.app/" target="_blank">READ</a>
+    <div class="shelf-label">TRACK 02 — CATALOGUE</div>
+    <div class="jacket-row">
+
+      <!-- VOL.1 -->
+      <div class="jacket">
+        <a class="jacket-cta" href="https://zineprot.vercel.app/" target="_blank">READ →</a>
+        <div class="jacket-inner">
+          <div class="jacket-spine"></div>
+          <div class="jacket-art art-vol1" data-label="YOHAKU"></div>
+          <div class="jacket-meta">
+            <div class="jacket-vol">VOL.01</div>
+            <div class="jacket-title">IWAKAN &amp; YOHAKU</div>
+            <div class="jacket-title-ja">違和感と余白</div>
+          </div>
+          <div class="jacket-qr"><div id="qr1"></div></div>
         </div>
       </div>
-      <div class="zine-card">
-        <div class="mini-record"></div>
-        <div class="zine-en">IWAKAN<br>&amp; HIRAMEKI</div>
-        <div class="zine-ja">違和感と閃き</div>
-        <p class="zine-desc">閃きは突然現れない。違和感を抱え、混ざり、<br>言葉にし、試す。そのプロセスを辿る。</p>
-        <div class="zine-footer">
-          <div id="qr2" class="qr-box"></div>
-          <a class="btn" href="https://zine2-pi.vercel.app/" target="_blank">READ</a>
+
+      <!-- VOL.2 -->
+      <div class="jacket">
+        <a class="jacket-cta" href="https://zine2-pi.vercel.app/" target="_blank">READ →</a>
+        <div class="jacket-inner">
+          <div class="jacket-spine"></div>
+          <div class="jacket-art art-vol2" data-label="HIRAMEKI"></div>
+          <div class="jacket-meta">
+            <div class="jacket-vol">VOL.02</div>
+            <div class="jacket-title">IWAKAN &amp; HIRAMEKI</div>
+            <div class="jacket-title-ja">違和感と閃き</div>
+          </div>
+          <div class="jacket-qr"><div id="qr2"></div></div>
         </div>
       </div>
-    </div>
+
+      <!-- VOL.3 UCI -->
+      <div class="jacket">
+        <a class="jacket-cta" href="https://ucizine.vercel.app/" target="_blank">READ →</a>
+        <div class="jacket-inner">
+          <div class="jacket-spine"></div>
+          <div class="jacket-art art-vol3" data-label="URBAN"></div>
+          <div class="jacket-meta">
+            <div class="jacket-vol">VOL.03</div>
+            <div class="jacket-title">URBAN COGNITION INTERFACE</div>
+            <div class="jacket-title-ja">都市認知インターフェイス</div>
+          </div>
+          <div class="jacket-qr"><div id="qr3"></div></div>
+        </div>
+      </div>
+
+      <!-- VOL.4 PANDEMIC LOGIC -->
+      <div class="jacket jacket--pl">
+        <a class="jacket-cta" href="https://pandemiclogic.vercel.app/" target="_blank">READ →</a>
+        <div class="jacket-inner">
+          <div class="jacket-spine"></div>
+          <div class="jacket-art art-vol4" data-label="PANDEMIC"></div>
+          <div class="jacket-meta">
+            <div class="jacket-vol">VOL.04</div>
+            <div class="jacket-title">PANDEMIC LOGIC</div>
+            <div class="jacket-title-ja">パンデミック・ロジック</div>
+          </div>
+          <div class="jacket-qr"><div id="qr4"></div></div>
+        </div>
+      </div>
+
+    </div><!-- /jacket-row -->
   </div>
 </section>
 
 <div class="groove-divider"></div>
 
-<!-- ===== UCI ===== -->
+<!-- UCI -->
 <section class="uci-section fade">
   <div class="uci-bg">UCI</div>
   <div style="position:relative;z-index:1;max-width:680px;">
-    <div class="track-num">TRACK 04 — VISION</div>
+    <div class="track-num">TRACK 03 — VISION</div>
     <div class="uci-en">URBAN COGNITION INTERFACE</div>
-    <div class="uci-title">URBAN<br>COGNITION</div>
+    <div class="uci-title">URBAN<br>COGNITION INTERFACE</div>
     <div class="uci-title-ja">都市認知インターフェイス</div>
-    <p class="text" style="margin-bottom:32px;">
-      都市には物理空間だけでなく、認知のレイヤーが存在する。<br><br>
-      認知差を肯定し、共有するための構想。
-    </p>
+    <p class="text" style="margin-bottom:32px;">都市には物理空間だけでなく、認知のレイヤーが存在する。<br><br>認知差を肯定し、共有するための構想。</p>
     <div style="display:flex;align-items:center;gap:18px;">
-      <div id="qr3" class="qr-box"></div>
+      <div id="qr5" class="qr-box"></div>
       <a class="btn" href="https://ucizine.vercel.app/" target="_blank">EXPLORE</a>
     </div>
   </div>
@@ -664,7 +598,35 @@ section{padding:130px 8%;position:relative;}
 
 <div class="groove-divider"></div>
 
-<!-- ===== AUTHOR ===== -->
+<!-- PANDEMIC LOGIC -->
+<section class="pl-section fade">
+  <div class="pl-ghost">PANDEMIC<br>LOGIC</div>
+  <div class="pl-inner">
+    <div class="pl-eyebrow">TRACK 04 — PHILOSOPHY</div>
+    <div class="pl-title">PANDEMIC<br>LOGIC</div>
+    <div class="pl-title-ja">パンデミック・ロジック</div>
+    <p class="pl-body">
+      組織は外から変わらない。<br>
+      静かに、底から、変異していく。<br>
+      内側から変えるための思考地図。
+    </p>
+    <div class="phase-list">
+      <div class="phase-item"><span class="phase-num">01</span>OBSERVE</div>
+      <div class="phase-item"><span class="phase-num">02</span>TRANSLATE</div>
+      <div class="phase-item"><span class="phase-num">03</span>SURVIVE</div>
+      <div class="phase-item"><span class="phase-num">04</span>INSTALL</div>
+      <div class="phase-item"><span class="phase-num">05</span>MUTATE</div>
+    </div>
+    <div class="pl-footer">
+      <div id="qr6" class="qr-box"></div>
+      <a class="btn" href="https://pandemiclogic.vercel.app/" target="_blank">EXPLORE</a>
+    </div>
+  </div>
+</section>
+
+<div class="groove-divider"></div>
+
+<!-- AUTHOR -->
 <section class="author-section fade">
   <div class="side-label">SIDE B</div>
   <div class="container">
@@ -674,26 +636,19 @@ section{padding:130px 8%;position:relative;}
         <div class="author-name-big">UKIGAI<br>SHINOBU</div>
         <div class="author-kana">浮貝 忍</div>
         <div class="tag-list">
-          <span class="tag">公共空間</span>
-          <span class="tag">官民共創</span>
-          <span class="tag">まちづくり</span>
-          <span class="tag">縁人</span>
-          <span class="tag">DX AMBASSADOR</span>
-        </div>
-        <p class="text" style="margin-bottom:32px;">
-          認知の違いが生み出す可能性を探究している。<br><br>
-          違和感を抱えたまま動く、境界に立つ人。
-        </p>
+          <span class="tag">公共空間</span><span class="tag">官民共創</span>
+          <span class="tag">まちづくり</span><span class="tag">縁人</span>
+       </div>
+        <p class="text" style="margin-bottom:32px;">認知の違いが生み出す可能性を探究している。<br><br>違和感を抱えたまま動く、境界に立つ。</p>
         <div style="display:flex;align-items:center;gap:18px;">
-          <div id="qr4" class="qr-box"></div>
+          <div id="qr7" class="qr-box"></div>
           <a class="btn" href="https://cheerful-dodol-f6885d.netlify.app/" target="_blank">PROFILE</a>
         </div>
       </div>
       <div style="display:flex;align-items:center;justify-content:center;">
-        <!-- Decorative vinyl -->
         <div style="width:240px;height:240px;border-radius:50%;background:repeating-radial-gradient(circle at center,#1c1812 0px,#1c1812 2px,#231e17 2.5px,#1c1812 4px);opacity:.55;box-shadow:0 0 60px rgba(0,0,0,.6);position:relative;animation:spin-record 6s linear infinite;">
           <div style="position:absolute;inset:30%;border-radius:50%;background:radial-gradient(circle at 38% 32%,#2e2410,#14100a);border:1px solid rgba(184,146,74,.18);display:flex;align-items:center;justify-content:center;animation:counter-spin 6s linear infinite;">
-            <span style="font-family:'Space Mono',monospace;font-size:.45rem;letter-spacing:.25em;color:#b8924a;">SUMIDA</span>
+            <span style="font-family:'Space Mono',monospace;font-size:.45rem;letter-spacing:.25em;color:#b8924a;">UKKY</span>
           </div>
         </div>
       </div>
@@ -703,7 +658,7 @@ section{padding:130px 8%;position:relative;}
 
 <div class="groove-divider"></div>
 
-<!-- ===== JOURNEY ===== -->
+<!-- JOURNEY -->
 <section class="journey-section fade">
   <div class="track-num" style="justify-content:center;">TRACK 06 — JOURNEY</div>
   <div class="journey-track">
@@ -717,110 +672,66 @@ section{padding:130px 8%;position:relative;}
     <div class="j-connector"></div>
     <div class="j-step"><div class="j-circle">共有</div></div>
     <div class="j-connector"></div>
-    <div class="j-step"><div class="j-circle" style="width:90px;height:90px;font-size:.95rem;">新しい<br>公共</div></div>
+    <div class="j-step"><div class="j-circle" style="width:90px;height:90px;font-size:.95rem;">新しい<br>何か</div></div>
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
+<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-bg-rec"></div>
   <div class="footer-title">PUBLIC<br>NOTEBOOK</div>
   <div class="footer-sub">世界はひとつではない。だから面白い。</div>
-  <div style="margin-top:48px;font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.35em;color:rgba(237,229,212,.12);">
-    PNB-001 · SUMIDA WARD PRESS · ALL RIGHTS RESERVED
-  </div>
+  <div style="margin-top:48px;font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.35em;color:rgba(237,229,212,.12);">PNB-001 · SUMIDA WARD PRESS · ALL RIGHTS RESERVED</div>
 </footer>
 
 <script>
 /* ── QR ── */
-new QRCode(document.getElementById("qr1"),{text:"https://zineprot.vercel.app/",width:90,height:90});
-new QRCode(document.getElementById("qr2"),{text:"https://zine2-pi.vercel.app/",width:90,height:90});
-new QRCode(document.getElementById("qr3"),{text:"https://ucizine.vercel.app/",width:90,height:90});
-new QRCode(document.getElementById("qr4"),{text:"https://cheerful-dodol-f6885d.netlify.app/",width:90,height:90});
+new QRCode(document.getElementById("qr1"),{text:"https://zineprot.vercel.app/",width:80,height:80});
+new QRCode(document.getElementById("qr2"),{text:"https://zine2-pi.vercel.app/",width:80,height:80});
+new QRCode(document.getElementById("qr3"),{text:"https://ucizine.vercel.app/",width:80,height:80});
+new QRCode(document.getElementById("qr4"),{text:"https://pandemiclogic.vercel.app/",width:80,height:80});
+new QRCode(document.getElementById("qr5"),{text:"https://ucizine.vercel.app/",width:90,height:90});
+new QRCode(document.getElementById("qr6"),{text:"https://pandemiclogic.vercel.app/",width:90,height:90});
+new QRCode(document.getElementById("qr7"),{text:"https://cheerful-dodol-f6885d.netlify.app/",width:90,height:90});
 
 /* ── TIMECODE ── */
 let frames=0,secs=0,mins=0,hrs=0;
-function pad(n){return String(n).padStart(2,'0');}
-setInterval(()=>{
-  frames++;
-  if(frames>=30){frames=0;secs++;}
-  if(secs>=60){secs=0;mins++;}
-  if(mins>=60){mins=0;hrs++;}
-  document.getElementById('timecode').textContent=pad(hrs)+':'+pad(mins)+':'+pad(secs)+':'+pad(frames);
-},33);
+const pad=n=>String(n).padStart(2,'0');
+setInterval(()=>{frames++;if(frames>=30){frames=0;secs++;}if(secs>=60){secs=0;mins++;}if(mins>=60){mins=0;hrs++;}document.getElementById('timecode').textContent=pad(hrs)+':'+pad(mins)+':'+pad(secs)+':'+pad(frames);},33);
 
-/* ── VU METERS ── */
-function buildVU(id){
-  const wrap=document.getElementById(id);
-  const bars=7;
-  for(let i=0;i<bars;i++){
-    const b=document.createElement('div');
-    b.className='vu-bar';
-    const h=Math.floor(Math.random()*10)+4;
-    const d=(Math.random()*.3+.25).toFixed(2);
-    b.style.setProperty('--h',h+'px');
-    b.style.setProperty('--d',d+'s');
-    b.style.animationDelay=(Math.random()*.2)+'s';
-    wrap.appendChild(b);
-  }
-}
+/* ── VU ── */
+function buildVU(id){const w=document.getElementById(id);for(let i=0;i<7;i++){const b=document.createElement('div');b.className='vu-bar';b.style.setProperty('--h',Math.floor(Math.random()*10+4)+'px');b.style.setProperty('--d',(Math.random()*.3+.25).toFixed(2)+'s');b.style.animationDelay=(Math.random()*.2)+'s';w.appendChild(b);}}
 buildVU('vuLeft');buildVU('vuRight');
 
-/* ── WAVEFORM CANVAS ── */
-const canvas=document.getElementById('waveCanvas');
-const ctx=canvas.getContext('2d');
-let waveOffset=0;
-function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=80;}
-resizeCanvas();
-window.addEventListener('resize',resizeCanvas);
-
+/* ── WAVEFORM ── */
+const wc=document.getElementById('waveCanvas');
+const wctx=wc.getContext('2d');
+let wo=0;
+function resizeWave(){wc.width=window.innerWidth;wc.height=80;}
+resizeWave();window.addEventListener('resize',resizeWave);
 function drawWave(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const w=canvas.width,h=canvas.height;
-  ctx.beginPath();
-  for(let x=0;x<w;x++){
-    const t=x/w;
-    const y=h/2
-      +Math.sin((t*12+waveOffset)*Math.PI*2)*14
-      +Math.sin((t*7+waveOffset*1.3)*Math.PI*2)*8
-      +Math.sin((t*23+waveOffset*.7)*Math.PI*2)*4
-      +(Math.random()-.5)*3;
-    if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-  }
-  ctx.strokeStyle='rgba(184,146,74,0.55)';
-  ctx.lineWidth=1.2;
-  ctx.stroke();
-
-  // mirror
-  ctx.beginPath();
-  for(let x=0;x<w;x++){
-    const t=x/w;
-    const y=h/2
-      -Math.sin((t*12+waveOffset)*Math.PI*2)*9
-      -Math.sin((t*7+waveOffset*1.3)*Math.PI*2)*5
-      -Math.sin((t*23+waveOffset*.7)*Math.PI*2)*2
-      -(Math.random()-.5)*2;
-    if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-  }
-  ctx.strokeStyle='rgba(184,146,74,0.25)';
-  ctx.lineWidth=.8;
-  ctx.stroke();
-
-  waveOffset+=.003;
-  requestAnimationFrame(drawWave);
+  wctx.clearRect(0,0,wc.width,wc.height);
+  const W=wc.width,H=wc.height;
+  wctx.beginPath();
+  for(let x=0;x<W;x++){const t=x/W;const y=H/2+Math.sin((t*12+wo)*Math.PI*2)*14+Math.sin((t*7+wo*1.3)*Math.PI*2)*8+Math.sin((t*23+wo*.7)*Math.PI*2)*4+(Math.random()-.5)*3;x===0?wctx.moveTo(x,y):wctx.lineTo(x,y);}
+  wctx.strokeStyle='rgba(184,146,74,0.55)';wctx.lineWidth=1.2;wctx.stroke();
+  wctx.beginPath();
+  for(let x=0;x<W;x++){const t=x/W;const y=H/2-Math.sin((t*12+wo)*Math.PI*2)*9-Math.sin((t*7+wo*1.3)*Math.PI*2)*5-(Math.random()-.5)*2;x===0?wctx.moveTo(x,y):wctx.lineTo(x,y);}
+  wctx.strokeStyle='rgba(184,146,74,0.22)';wctx.lineWidth=.8;wctx.stroke();
+  wo+=.003;requestAnimationFrame(drawWave);
 }
 drawWave();
 
+/* ── (jacket art now CSS-based, no JS needed) ── */
+
 /* ── SCROLL FADE ── */
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show');});
-},{threshold:.08});
-document.querySelectorAll('.fade').forEach(el=>observer.observe(el));
+const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('show');});},{threshold:.06});
+document.querySelectorAll('.fade').forEach(el=>obs.observe(el));
 
 /* ── PARALLAX RECORD ── */
 const pw=document.querySelector('.player-wrap');
 document.addEventListener('mousemove',e=>{
-  if(!pw)return;
+  if(!pw||window.innerWidth<=860)return;
   const x=(e.clientX/window.innerWidth-.5)*10;
   const y=(e.clientY/window.innerHeight-.5)*10;
   pw.style.transform=`translateY(-50%) translate(${x}px,${y}px)`;
